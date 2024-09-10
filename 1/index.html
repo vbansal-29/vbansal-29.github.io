@@ -61,10 +61,10 @@
             color: #666;
         }
 
-        /* Grid styles for images */
+        /* Grid styles for images (2 images per row) */
         .image-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr); /* Change to 2 columns per row */
             gap: 20px;
             margin: 40px auto;
             max-width: 800px;
@@ -98,13 +98,13 @@
     <!-- Context section -->
     <section class="context">
         <h2>Context</h2>
-        <p>TODO</p>
+        <p>Sergei Mikhailovich Prokudin-Gorskii believed color photography would be the future. To pursue this dream, Prokudin-Gorskii won the Russian Tzar's special permission to travel across the vast Russian Empire and take color photographs of unique people, places, and things. Prokudin-Gorskii recorded three different exposures of every scene he saw onto a glass plate using a red, green, and blue filter. He then planned to stack the three images onto each other to create a color image. The goal of this project is to create a color image by aligning Prokudin-Gorskii's three color glass plate photos on top of each other in a (r, g, b) fashion. </p>
     </section>
 
     <!-- Single Scale Alignments section -->
     <section class="context">
         <h2>Single Scale Alignments</h2>
-        <p>TODO</p>
+        <p>For single scale alignments on the smaller images with a roughly 400 x 400 dimension, I implemented a program which searched over a defined displacement of pixels (default 15) and scored each row and column alignment using a metric. It then picked the row and column alignment which produced the highest similarity in terms of that metric, which was then used to create the final color image. I used blue as a reference, and aligned both the green and red images with the blue image. <br> <br> I implemented & applied three different metrics to score the row and column alignments: euclidean distance (square root of sum of squared distances), normalized cross correlation (normalized dot product of the two flattened images), and scikit-image's structural similarity library. The structural similarity library performed the best in determining which row and column shifts resulted in the highest quality alignment, as when I experimented with different search ranges and stacking orders and used NCC or SSD, these metrics were not able to determine the correct shifts consistently. Thus, I chose to use structural similarity. <br><br> My function to accomplish this was a for loop which looped over [-search_range, search_range] shifts for both rows and columns, resulting in search_range^2 permutations being checked during the alignment function. It is also important to note that all three metric functions mentioned above are bounded by O(n) with n being the number of pixels in the image. These three .jpg files are relatively small in dimensional size, meaning that they ran efficiently just using the vanilla single scale alignment approach. </p>
     </section>
 
     <!-- Image grid section for Single Scale Alignments -->
@@ -112,68 +112,104 @@
         <!-- Row 1 -->
         <div>
             <img src="./outputs/cathedral.jpg" alt="Image 1">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (5, 2), r: (12, 3)</p>
         </div>
         <div>
             <img src="./outputs/monastery.jpg" alt="Image 2">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (-3, 2), r: (3, 2)</p>
         </div>
+
+        <!-- Row 2 -->
         <div>
             <img src="./outputs/tobolsk.jpg" alt="Image 3">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (3, 3), r: (6, 3)</p>
         </div>
     </section>
 
     <!-- Pyramid Alignments section -->
     <section class="context">
         <h2>Pyramid Alignments</h2>
-        <p>TODO</p>
+        <p>As I mentioned previously, the metrics which score similarity between a reference image and a target image to shift are bounded by O(n) with n being the number of pixels in the image. For the smaller approximately 400 x 400 .jpg file images, this ran efficiently without any additional modifications. However, for the larger dimensional .tif file images, which had approximately 3000 x 3000 pixels, the vanilla approach would not be efficient and complete in the given runtime limit of 2 minutes per image. <br><br> To solve this issue, I implemented an image pyramid alignment function built upon my single scale alignment function. This image pyramid successively scaled down the input image at each level by a factor of 0.5 until it reached the bottom level, where the number of levels were predefined to a set value by the user. At the bottom level, once the dimensionality of the 3000 x 3000 pixel .tif file had been reduced to a 400 x 400 pixel dimensionality, the single scale alignment function that was previously defined was run on this scaled down image which still encoded the original image's information and metadata. Then, as a final step, the shifts determined at the bottom level = 0 were propagated up to the topmost level by multiplying them by 2 recursively. This multiplication by 2 accounted for the scale down by a factor of 0.5 which was performed. <br><br> This image pyramid enabled me to write an algorithm that could process and align large dimensional images in an efficient timeframe. Through experimentation, I discovered that 4 levels were sufficient to discover an alignment. If I attempted to use 5 levels, the image at the bottom level = 0 lost too much information.  </p>
     </section>
 
     <!-- Image grid section for Pyramid Alignments -->
     <section class="image-grid">
-        <!-- Row 2 -->
+        <!-- Row 1 -->
         <div>
             <img src="./outputs/church.jpg" alt="Image 4">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (24, 0), r: (56, -8)</p>
         </div>
         <div>
             <img src="./outputs/emir.jpg" alt="Image 5">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (48, 24), r: (104, 40)</p>
         </div>
+
+        <!-- Row 2 -->
         <div>
             <img src="./outputs/harvesters.jpg" alt="Image 6">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (56, 16), r: (120, 16)</p>
+        </div>
+        <div>
+            <img src="./outputs/icon.jpg" alt="Image 7">
+            <p class="image-caption">g: (40, 16), r: (88, 24)</p>
         </div>
 
         <!-- Row 3 -->
         <div>
-            <img src="./outputs/icon.jpg" alt="Image 7">
-            <p class="image-caption">TODO</p>
-        </div>
-        <div>
             <img src="./outputs/lady.jpg" alt="Image 8">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (56, 8), r: (120, 8)</p>
         </div>
         <div>
-            <img src="./outputs/melons.jpg" alt="Image 9">
-            <p class="image-caption">g: (80, 8), r: (176, 16)</p>
+            <img src="./outputs/train.jpg" alt="Image 9">
+            <p class="image-caption">g: (40, 8), r: (88, 32)</p>
         </div>
+    </section>
 
-        <!-- Row 4 -->
+    <!-- Image grid section for Multi-Scale Alignments -->
+    <section class="image-grid">
+        <!-- Row 1 -->
         <div>
             <img src="./outputs/onion_church.jpg" alt="Image 10">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (48, 24), r: (104, 40)</p>
         </div>
         <div>
             <img src="./outputs/sculpture.jpg" alt="Image 11">
-            <p class="image-caption">TODO</p>
+            <p class="image-caption">g: (32, -8), r: (136, -24)</p>
         </div>
+
+        <!-- Row 2 -->
         <div>
-            <img src="./outputs/self_portrait.jpg" alt="Image 12">
-            <p class="image-caption">g: (80, 32), r: (176, 40)</p>
+            <img src="./outputs/three_generations.jpg" alt="Image 12">
+            <p class="image-caption">g: (48, 16), r: (112, 8)</p>
         </div>
     </section>
-    
+
+
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Extended Pyramid Alignments</h2>
+        <p>The image pyramid alignment approach mentioned previously with a default search range of 15 and no data preprocessing successfully aligned all .tif files except two. The two .tif files which did not align successfully were melons.tif and self_portrait.tif. <br><br> To improve the alignment of these two images, which were being stubborn with the old approach, I implemented a preprocessing step before calculating the structural_similarity metric on the shifted image with the reference by cropping 10% of the borders which had each lines of color or black rows. In addition, I increased the search range of the algorithm to [-30, 30] from [-15, 15] in both the row and column dimension spaces. The combination of these two changes successfully enabled me to find alignments of melon.tif and self_portrait.tif, showcased below!</p>
+    </section>
+
+    <!-- Image grid section for Multi-Scale Alignments -->
+    <section class="image-grid">
+        <!-- Row 1 -->
+        <div>
+            <img src="./outputs/melons.jpg" alt="Image 10">
+            <p class="image-caption">g: (48, 24), r: (104, 40)</p>
+        </div>
+        <div>
+            <img src="./outputs/self_portrait.jpg" alt="Image 11">
+            <p class="image-caption">g: (32, -8), r: (136, -24)</p>
+        </div>
+    </section>
+
+
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Conclusion</h2>
+        <p>In conclusion, I used an image pyramid with 4 levels, a search range of [-30, 30] pixels, and scikit image's structural similarity library to successfully align Prokudin-Gorskii's images. </p>
+    </section>
+
 </body>
 </html>

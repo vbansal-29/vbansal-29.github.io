@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS180 Project 1</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0 0 0;
+        }
+
+        header img {
+            width: 400px; /* Smaller box size */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+
+        header h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .author {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Styles for the context section */
+        .context {
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #ddd;
+        }
+
+        .context h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .context p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid3 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid5 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid4 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CS 180 Project 2: Fun with Filters and Frequencies!</h1>
+    </header>
+
+    <div class="author">
+        <p>By Vishal Bansal</p>
+    </div>
+
+    <section class="context">
+        <h2>Part 1: Fun with Filters</h2>
+        <p>For part 1.1, I used the finite difference operators, dX = [[-1, 1]] and dY = [[-1], [-1]] to find the partial derivative in x and y of the cameraman image by convolving the dX and dY operators with the image. After computing the partial derivates in each direction, I was able to use this information to compute the gradient magnitude, as the gradient is a vector showing partial derivatives on each axis. <br> <br>  To further turn this into an edge image, I binarized the gradient magnitude by picking an appropriate threshold of . This meant that all values above or equal to the threshold were set to 1, and below were set to 0, creating an edge image! The threshold I chose was 0.15, but there was still noise present in the grass, but I could not increase this threshold because it then removed information about the buildings in the back from the image. </p>
+        <p>For part 1.2, I noted the results with just the difference operators had noise. To reduce noise, I applied a gaussian smoothing filter by convolving a 2D gaussian filter over the image, creating a blurred version of the image, and then performing the same operations as before. The differences I see from Part 1.1 are that the edges are more pronounced and clear, compared to the noisy, faded edges from Part 1.1. <br> <br> In addition, I also experimented with DoG filters, which are the filters created by convolving dX and dY with the 2D gaussian filter, and then applying them to the original image as before. As you can see below, both the smoothing and DoG filters resulted in the same edge image output. </p>
+        <p>For a brief description of the gradient magnitude computation, the gradient is a vector [dX, dY], so for each point in the grid, the magnitude of the gradient can be computed using the formula for the magnitude of a vector, which is sqrt(dX ^ 2 + dY ^2). This was how I computed the gradient magnitude.</p>
+    </section>
+
+    <!-- Image grid section for Part 1: Fun with Filters -->
+    <section class="image-grid">
+        <!-- Row 1 -->
+        <div>
+            <img src="./media/cameraman.png" alt="Image 1">
+            <p class="image-caption">Original cameraman</p>
+        </div>
+        <div>
+            <img src="./media/smoothed.png" alt="Image 2">
+            <p class="image-caption">Smoothed cameraman</p>
+        </div>
+
+        <!-- Row 2 -->
+        <div>
+            <img src="./media/gradient.png" alt="Image 3">
+            <p class="image-caption">Gradient for cameraman, <br>threshold = 0.15</p>
+        </div>
+        <div>
+            <img src="./media/gradient_smooth.png" alt="Image 4">
+            <p class="image-caption">Gradient with smoothing for cameraman</p>
+        </div>
+
+        <!-- Row 3 -->
+        <div>
+            <img src="./media/gradient_DoG.png" alt="Image 5">
+            <p class="image-caption">Gradient with DoG filters for cameraman</p>
+        </div>
+
+    </section>
+
+    <section class="context">
+        <h2>Part 2.1: Fun with Frequencies</h2>
+        <p>In part 2.1, I derived the unsharp masking filter operation by noting that when we convolve an image with a 2D gaussian filter, we are essentially blurring the image, and that isolates the low frequencies of the image. To make a sharpened image, we can add more of the high frequencies (image - the blurred image) to the original. <br> <br> So, to sharpen the images below, I sharpened each of them by blurring them with a 2D gaussian filter and subtracting that blurred image from the original to get the higher frequencies, and then adding the higher frequencies to the image. I created the 2D Gaussian Kernel by filter creating a 1D gaussian using cv2.getGaussianKernel, and taking the outer product of the 1D Gaussian with its transpose. </p>
+        <p>The equation to blur an image was blurred = image (convolve with) 2D gaussian filter. The equation to sharpen an image using this blurred image was sharpened = image - alpha * (image - blurred). Alpha in this case was a parameter that I could tune that controlled how sharp the image was, as when alpha was set equal to a large value, the resulting image was adding the higher frequnecies from the image more strongly. In contrast, when the alpha was small, the image was not as sharp, as higher frequencies were not as strongly added. In addition, the 2D Gaussian filter was created with the parameters sigma = 1.0 and size = 8.</p>
+        <p>For evaluation, I chose the sharp taj mahal image. I then blurred this taj image with a 2D gaussian filter as described above. I resharpened the taj image with the equation described above with alpha = 1. When comparing the original sharp image with the resharpened image, I noticed that the finer details of the taj image, which were present in the original such as the intricate carvings, and the scaffolding on the left tower were lost when the image was blurred. So when the image was resharpened, the lost finer details were not recovered, as the other major parts of the image were correctly resharpened. The resharpened image is also noisier and not as clear compared with the original. </p>
+    </section>
+
+        <!-- 1x2 image grid -->
+        <section class="image-grid2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: 0 auto;">
+            <!-- Image 1 -->
+            <div style="text-align: center;">
+                <img src="./media/taj.jpg" alt="Original Taj Mahal" style="width: 80%; height: auto;">
+                <p class="image-caption">Original Taj</p>
+            </div>
+            
+            <!-- Image 2 -->
+            <div style="text-align: center;">
+                <img src="./media/sharpenedtaj.jpg.png" alt="Dummy Title 2" style="width: 80%; height: auto;">
+                <p class="image-caption">Sharpened Taj</p>
+            </div>
+
+            <!-- Image 1 -->
+            <div style="text-align: center;">
+                <img src="./media/chichen.jpg" alt="Original Chichen Itza" style="width: 80%; height: auto;">
+                <p class="image-caption">Original Chichen Itza</p>
+            </div>
+            
+            <!-- Image 2 -->
+            <div style="text-align: center;">
+                <img src="./media/sharpenedchichen.jpg" alt="Dummy Title 2" style="width: 80%; height: auto;">
+                <p class="image-caption">Sharpened Chichen Itza</p>
+            </div>
+
+            <!-- Image 1 -->
+            <div style="text-align: center;">
+                <img src="./media/lebron.jpg" alt="Original Lebron" style="width: 80%; height: auto;">
+                <p class="image-caption">Original Lebron</p>
+            </div>
+            
+            <!-- Image 2 -->
+            <div style="text-align: center;">
+                <img src="./media/sharpenedlebron.jpg" alt="Dummy Title 2" style="width: 80%; height: auto;">
+                <p class="image-caption">Sharpened Lebron</p>
+            </div>
+        </section>
+
+        <section class="image-grid">
+            <!-- Row 1 -->
+            <div>
+                <img src="./media/taj.jpg" alt="Image 1">
+                <p class="image-caption">Original image</p>
+            </div>
+            <div>
+                <img src="./media/blurredtaj.jpg" alt="Image 2">
+                <p class="image-caption">Blurred image, sigma = 1.0, size = 8</p>
+            </div>
+                <div>
+                <img src="./media/resharpenedtaj.jpg" alt="Image 3">
+                <p class="image-caption">Resharpened image, alpha = 3</p>
+            </div>
+            
+        </section>
+
+
+
+    <section class="context">
+        <h2>Part 2.2: Hybrid Images</h2>
+        <p>Hybrid Images are static images that can change as a result of the interpretation of low and high frequencies at varying distances. At a close distance, the high frequency elements dominate the viewer's perception. But, at a distance, the low frequency elements are more visible. And by blending two images – the high frequencies of image 1 and low frequencies of image 2 – we can create a hybrid image between the two.</p>
+        <p>To create the hybrid image, I first blurred the first image with a 2D Gaussian Kernel, created by transposing a 1D Gaussian Kernel with a size and sigma as parameters and taking an outer product. The blurred image was representative of the low frequenices. And to recover the high frequencies of the second image, I did a similar operation where I convolved the second image with the same 2D Gaussian to extract the low frequencies, and then subtracted the low frequencies * an alpha parameter, in this case 0.4, to recover the high frequencies. Then finally, to create the hybrid image, I had to add these low and high frequencies together, and clip the values to 255 to be inside the valid RGB range. </p>
+        <p>I had to tweak the strength of the 2D Gaussian Kernel according to the pair of images I was using, as often the strength of the 2D Gaussian Kernel was based on how strong it had to be to blur the low frequency image seen at a distance to a respectable amount. I experimented with different values for Sigma and Size to get the best result. Below, I've displayed the sample pairs of images provided, in addition to pairs of images I chose to blend that showcase changes over time, expression etc. For my favorite pair of images, I also display the log magnitude of the Fourier Transform of the two images, their low and high frequency versions, and the hybrid image between the two.</p>
+        <p>Below, I display the different pairs of images I created hybrids of in addition to the sample images used for debugging. My favorite result was blending Shah Rukh Khan, a popular Indian actor, with a picture of a cat I found online. For this favorite result, I displayed the FFT Log Magnitudes below. I also displayed an example of a failure case, where my hybrid image did not showcase the distance effect, where at low distances, the high frequencies are more prominent. </p>
+        <p>An example of a failure is when I tried to create a change of expression hybrid of the Rock by hybridizing an image of a happy rock and a serious rock. However, due to the differing sizes and angles of the rocks faces in the respective images, the hybrid image was not properly aligned and hybridized.</p>
+
+    </section>
+
+     <!-- Image grid section for Part 1: Fun with Filters -->
+     <section class="image-grid">
+        <div>
+            <img src="./media/low_freq_Derek.jpg" alt="Image 4">
+            <p class="image-caption">Low Frequency Derek Picture</p>
+        </div>
+
+        <!-- Row 3 -->
+        <div>
+            <img src="./media/high_freq_Nutmeg.jpg" alt="Image 5">
+            <p class="image-caption">High Frequency Nutmeg Picture</p>
+        </div>
+
+        <div>
+            <img src="./media/hybridDerekNutmeg.jpg" alt="Image 5">
+            <p class="image-caption">Derek and Nutmeg Hybrid <br> Sigma = 10, Size = 40</p>
+        </div>
+
+        <div>
+            <img src="./media/low_freq_srk.jpg" alt="Image 4">
+            <p class="image-caption">Low Frequency srk Picture</p>
+        </div>
+
+        <!-- Row 3 -->
+        <div>
+            <img src="./media/high_freq_cat.jpg" alt="Image 5">
+            <p class="image-caption">High Frequency cat Picture</p>
+        </div>
+
+        <div>
+            <img src="./media/hybridsrkcat.jpg" alt="Image 5">
+            <p class="image-caption">srk and cat Hybrid <br> Sigma = 3, Size = 15</p>
+        </div>
+
+        <!-- <div>
+            <img src="./media/low_freq_kajol.jpg" alt="Image 4">
+            <p class="image-caption">Low Frequency srk Picture</p>
+        </div> -->
+
+        <!-- Row 3 -->
+        <!-- <div>
+            <img src="./media/high_freq_cat2.jpg" alt="Image 5">
+            <p class="image-caption">High Frequency cat 2 Picture</p>
+        </div>
+
+        <div>
+            <img src="./media/hybridkajolcat2.jpg" alt="Image 5">
+            <p class="image-caption">Kajol and cat 2 Hybrid <br> Sigma = 3, Size = 15</p>
+        </div> -->
+    </section>
+<!-- Image grid section for Part 1: Fun with Filters -->
+<section class="image-grid3">
+    <div style="text-align: center;">
+        <img src="./media/fft_srk.jpg" alt="Image 4" style="width: 100%; height: auto;">
+        <p class="image-caption">FFT Log Magnitude of Srk</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/fft_cat.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        <p class="image-caption">FFT Log Magnitude of Cat</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/fft_low_freq_srk.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        <p class="image-caption">FFT Log Magnitude of Low Frequencies of Srk</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/fft_high_freq_cat.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        <p class="image-caption">FFT Log Magnitude of High Frequencies of Cat</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/fft_hybrid_srk_cat.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        <p class="image-caption">FFT Log Magnitude of Hybrid Image Srk and Cat</p>
+    </div>
+</section>
+
+ <!-- Image grid section for Part 1: Fun with Filters -->
+ <section class="image-grid">
+
+    <div>
+        <img src="./media/low_freq_kajol.jpg" alt="Image 4">
+        <p class="image-caption">Low Frequency kajol Picture</p>
+    </div>
+
+    <!-- Row 3 -->
+    <div>
+        <img src="./media/high_freq_cat2.jpg" alt="Image 5">
+        <p class="image-caption">High Frequency cat 2 Picture</p>
+    </div>
+
+    <div>
+        <img src="./media/hybridkajolcat2.jpg" alt="Image 5">
+        <p class="image-caption">Kajol and cat 2 Hybrid <br> Sigma = 6, Size = 25</p>
+    </div>
+
+    <div>
+        <img src="./media/low_freq_rock_happy.jpg" alt="Image 4">
+        <p class="image-caption">Low Frequency Rock Happy Picture</p>
+    </div>
+
+    <!-- Row 3 -->
+    <div>
+        <img src="./media/high_freq_rock_serious.jpg" alt="Image 5">
+        <p class="image-caption">High Frequency Rock Serious Picture</p>
+    </div>
+
+    <div>
+        <img src="./media/hybridrock.jpg" alt="Image 5">
+        <p class="image-caption">Rock Hybrid <br> Sigma = 3, Size = 15</p>
+    </div>
+</section>
+
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Part 2.3: Gaussian and Laplacian Stacks</h2>
+        <p>I built functions to create Gaussian and Laplacian Stacks for an image. The Gaussian Stack is created by convolving the image with a 2D Gaussian Filter at increasing sigma values with the original image, leading to a stack of increasingly blurred images. The Laplacian Stack is created by taking the differences between the gaussian stack at different indexes: gaussian_stack[i] - gaussian_stack[i+1]. The last image I appended to the Gaussian Stack was the last element in the Gaussian Stack, for reconstruction purposes to provide a base.</p>
+        <p>There was a difference in relation to the image pyramid alignment algorithms in the previous Project 1 was that the image was being downsampeld at each stage. This is no longer the case with the Gaussian and Laplacian Stacks. In addition, to display the Laplacian Stack visually, I normalized the stack using the formula, (img - img.min()) / (img.max() - img.min()). Both the Gaussian and Laplacian Stacks for the Apple and Orange are visualized below.</p>
+    </section>
+
+    <!-- Image grid section for Multi-Scale Alignments -->
+    
+    <div style="text-align: center;">
+        <p>Gaussian Stack for Apple</p>
+    </div>
+
+    <section class="image-grid5">
+        <div style="text-align: center;">
+            <img src="./media/apple_gaussian_0.jpg" alt="Image 4" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_gaussian_1.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_gaussian_2.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_gaussian_3.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_gaussian_4.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+
+        <div style="text-align: center;">
+            <img src="./media/apple_gaussian_5.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    </section>
+
+    <div style="text-align: center;">
+        <p>Gaussian Stack for Orange</p>
+    </div>
+
+    <section class="image-grid5">
+        <div style="text-align: center;">
+            <img src="./media/orange_gaussian_0.jpg" alt="Image 4" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_gaussian_1.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_gaussian_2.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_gaussian_3.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_gaussian_4.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+
+        <div style="text-align: center;">
+            <img src="./media/orange_gaussian_5.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    </section>
+
+    <div style="text-align: center;">
+        <p>Laplacian Stack for Apple</p>
+    </div>
+
+    <section class="image-grid3">
+        <div style="text-align: center;">
+            <img src="./media/apple_lp_0.jpg" alt="Image 4" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_lp_1.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_lp_2.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_lp_3.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/apple_lp_4.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    </section>
+
+    <div style="text-align: center;">
+        <p>Laplacian Stack for Orange</p>
+    </div>
+
+    <section class="image-grid3">
+        <div style="text-align: center;">
+            <img src="./media/orange_lp_0.jpg" alt="Image 4" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_lp_1.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_lp_2.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_lp_3.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    
+        <div style="text-align: center;">
+            <img src="./media/orange_lp_4.jpg" alt="Image 5" style="width: 100%; height: auto;">
+        </div>
+    </section>
+
+    <!-- Other Pictures from the Prokudin-Gorskii  section -->
+    <section class="context">
+        <h2>Part 2.4: Multiresolution Blending (a.k.a. the oraple!)</h2>
+        <p>To blend the images, I created the Gaussian and Laplacian stacks for the orange and the apple. The Laplacian Stack was calculated using the Gaussian Stack taking the difference between consecutive elements of the Gaussian Stack Array. Then to use the Laplacian Stacks for image blending, I had to do one additional step: I created a left mask, which took the apple image and set the left half equal to 1, and the right half equal to 0. Then I created a Gaussian Stack for the mask with the same number of levels as the image's Gaussian Stack. <br> <br> To do the actual blending, I looped through the stacks, I did an elementwise multiplication between the left mask's Gaussian Stack[i] and the apple LP stack[i], and the same thing for the orange LP stack[i] with (1 - the Mask) to create the right mask from the left mask. Finally I reconstructed the images using a blended base of the left_mask[-1] * the apple_lp[-1] and the right_mask[-1] * orange_lp[-1]. The oraple is displayed below. </p>
+        <p>At each level of the Gaussian Stack, I increased the blur by altering the parameters of the 2D Gaussian Filter which was convolved with the image. The value of sigma was set to 20, and the size was set to 4 * l + 1, meaning at each level the size of the 2D Gaussian Filter increased, leading to a greater blurring effect. The horizontal and vertical seam between the apple and orange was blended by creating Gaussian Stacks of the original mask, meaning at each level, there was Gaussian blurring, smoothing out the transition between the two images.</p>
+        <p>I also performed blending on other pairs of images, and the results are displayed below. In addition to the classic vertical seam mask, I created an irregular mask in shape of an ellipse to blend together Hermione and Ron.</p>
+    </section>
+
+    
+    <section class="image-grid">
+        <!-- Row 1 -->
+        <div>
+            <img src="./media/apple.jpeg" alt="Image 1">
+            <p class="image-caption">Apple</p>
+        </div>
+        <div>
+            <img src="./media/orange.jpeg" alt="Image 2">
+            <p class="image-caption">Orange</p>
+        </div>
+            <div>
+            <img src="./media/oraplenice.png" alt="Image 3">
+            <p class="image-caption">Blended Oraple</p>
+        </div>
+
+        <div>
+            <img src="./media/steph.jpg" alt="Image 1">
+            <p class="image-caption">Steph</p>
+        </div>
+        <div>
+            <img src="./media/lebron.jpg" alt="Image 2">
+            <p class="image-caption">Lebron</p>
+        </div>
+            <div>
+            <img src="./media/steph_lebron.jpg" alt="Image 3">
+            <p class="image-caption">Blended Stebron</p>
+        </div>
+        
+    </section>
+    
+    <div style="text-align: center;">
+        <p class="image-caption">Irregular Face Mask</p>
+        <img src="./media/face_mask.png" alt="Image 1">
+    </div>
+
+    <section class="image-grid">
+        <div>
+            <img src="./media/hermione.jpg" alt="Image 1">
+            <p class="image-caption">Hermione</p>
+        </div>
+        <div>
+            <img src="./media/ron.jpg" alt="Image 2">
+            <p class="image-caption">Ron</p>
+        </div>
+            <div>
+            <img src="./media/hermione_ron.jpg" alt="Image 3">
+            <p class="image-caption">Blended Hermione Weasley</p>
+        </div>
+    </section>
+
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Conclusion</h2>
+        <p>I had fun playing around with filters and frequenices to manipulate images in unique ways during this project!</p>
+    </section>
+
+</body>
+</html>

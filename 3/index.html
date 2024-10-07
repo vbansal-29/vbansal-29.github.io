@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS180 Project 1</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0 0 0;
+        }
+
+        header img {
+            width: 400px; /* Smaller box size */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+
+        header h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .author {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Styles for the context section */
+        .context {
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #ddd;
+        }
+
+        .context h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .context p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid17 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid9 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust min/max sizes */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid9 img {
+            width: 100%; /* Make sure images take up the full column width */
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin: 40px auto;
+        max-width: 800px;
+        }
+        .image-grid2 > div {
+            flex: 1;
+        }
+        .image-grid2 img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid3 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid5 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid4 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .centered-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            justify-content: center;
+        }
+        .centered-image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div style="text-align: center;">
+            <img src="./media/Screenshot 2024-10-07 at 2.43.37 PM.png" alt="Averaged Mid-way Face" style="width: 25%; height: auto;">
+        </div>
+    </header>
+    
+
+    <header>
+        <h1>CS 180 Project 3: Face Morphing</h1>
+    </header>
+
+    <div class="author">
+        <p>By Vishal Bansal</p>
+    </div>
+
+    <section class="context">
+        <h2>Part 1: Defining Correspondences</h2>
+        <p>I defined corresponding pairs of points between the two images I wanted to merge: portraits of George Clooney and Brad Pitt from Martin's collection. These corresponding points were selected using a tool from last year that was linked on the project spec. In order to create a triangulation that we could use to warp the images into the midway image, we needed correspondences that defined the structure of the faces and photos. I selected 76 correspondences on the two faces, outlining key facial features like eyes, hair, jawlines, etc.</p>
+        <p>I created the Triangulation using the delaunay library provided in Python, creating triangles that connected the points. The delaunay triangulation method is useful because it avoids overly thin triangles, merging them to form larger triangles. The triangulation was computed at a midway shape (a_pts + b_pts)/2 to lessen the potential of image deformations. I computed the triangulation on this set, which resulted in simplices (indexes of the points in the original arrays that formed the triangles). I only computed one triangulation to stay consistent with labeling across both faces. </p>
+        <p>The triangulations on George Clooney and Brad Pitt's faces are displayed below along with the correspondences selected using the online tool.</p>
+    </section>
+
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/a.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Clooney Original Face</p>
+        </div>
+        <div>
+            <img src="./media/b.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Pitt Original Face</p>
+        </div>
+    </section>
+    
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/clooneytriangle.png" alt="Clooney Triangulation">
+            <p class="image-caption">Clooney Triangulation</p>
+        </div>
+        <div>
+            <img src="./media/pitttriangle.png" alt="Pitt Triangulation">
+            <p class="image-caption">Pitt Triangulation</p>
+        </div>
+    </section>
+    <section class="context">
+        <h2>Part 2: Computing the "Mid-way Face" </h2>
+        <p>Next, I computed the mid-way face of George Clooney and Brad Pitt using the Delaunay Triangulation from Part 1 which was computed on the midway (average) points of the correspondences selected on both images. The triangles created were marked by simplices, indexes of the points in the original arrays – e.g. triangle [1 3 2] corresponds to [a_points[1] a_points[3] a_points[2]]. Using the simplices, I created triangles in the A_points space, Midway points space, and the B_points space.</p>
+        <p>I computed an affine transformation matrix between the A_points and B_points space to the Midway_points space. To explain what this means, the vertices of the triangles in the A_points space (derived from the Delaunay Triangulation's simplices) are mapped to the Midway_points space through an affine transformation matrix [[a b c] [d e f] [0 0 1]], where the last row is preserve the affine nature of the transformation, and the six parameters correspond to the transformation. I computed an affine transformation matrix for each of the triangles simplices and for A and B, mapping each of the triangles to the midway space.</p>
+        <p>The final step in the process was to actually warp both the original A and B images to the Midway points space, creating a Midway face. To accomplish this, I created inverse affine transformation matrices, derived from the affine matrices derived in the previous step. These inverse affine transformation matrices mapped the Midway points to the A points space. Then, I used the polygon function in scikit image to create a "mask" which contained the row and column indices of all points contained inside the Triangle in the midway space. Then, I used a vectorized operation and the inverse affine transformation matrix to map these Midway points in the Mask back to the A_points space. </p>
+        <p>After this reverse mapping was complete, I sampled the original colors from image A using the mapped A_points using nearest neighbor interpolation (Bilinear interpolation did not give me improvement, so to improve performance, I implemented nearest neighbor interpolation by rounding the coordinate numbers to integers, and then sampling. After sampling the colors, I set the indices of the original Midway points from the polygon function in the Midway image to the colors I sampled. I performed this process for each triangle in the Midway space, for both A and B. Then I averaged the results for A and B to get the resulting Midway face between Brad Pitt and George Clooney. Brad Clooney's displayed below. </p>
+    </section>
+
+    <section class="image-grid9">
+        <!-- Row 2 -->
+        <div>
+            <img src="./media/a.jpg" alt="Image 3">
+            <p class="image-caption">Clooney Original Face</p>
+        </div>
+        <div>
+            <img src="./media/b.jpg" alt="Image 4">
+            <p class="image-caption">Pitt Original Face</p>
+        </div>
+        <div>
+            <img src="./media/midway_image_a.jpg" alt="Image 3">
+            <p class="image-caption">Clooney Mid-way Face</p>
+        </div>
+        <div>
+            <img src="./media/midway_image_b.jpg" alt="Image 4">
+            <p class="image-caption">Pitt Mid-way Face</p>
+        </div>
+    </section>
+
+    <div style="text-align: center;">
+        <img src="./media/midway_image.jpg" alt="Averaged Mid-way Face" style="width: 18%; height: auto;">
+        <p class="image-caption">Averaged Mid-way Face</p>
+    </div>
+
+
+
+
+    <section class="context">
+        <h2>Part 3: The Morph Sequence</h2>
+        <p>Next, I created a Morph Sequence .gif between George Clooney and Brad Pitt, to illustrate the transformation process. I wrote a function morphed_im = morph(im1, im2, im1_pts, im2_pts, tri, warp_frac, dissolve_frac) which controlled the shape warping and the cross dissolve. The two images were warped into an intermediate shape configuration using the warp fraction, and then cross dissolved using the cross dissolve frac. Both fractions started at 0, resulting in the original image A, and they ended at 1, resulting in the original image B. The warp was defined by the correspondences and triangulation from the previous part.</p>
+        <p>The sequence was created using 45 frames, and each iteration, both fractions were incremented by 1/45th. Each frame is displayed in the gif for 30 fps.</p>
+    </section>
+
+    <div style="text-align: center;">
+        <img src="./media/ezgif.com-animated-gif-maker.gif" alt="Averaged Mid-way Face" style="width: 18%; height: auto;">
+        <p class="image-caption">Morph Sequence Gif</p>
+    </div>
+
+   
+
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Part 4. The "Mean face" of a populations</h2>
+        <p>Next, I extracted the "Mean face" of a population of 37 people from the Danes dataset. The Danes dataset had defined correspondences between all the images. I averaged these correspondences to create midway points similar to Part 2, except now I was working with more than 2 images. Then I created a Delaunay triangulation based on these Midway points. From there, it was a similar process to Part 2, where I warped each of the images in the dataset into this average shape. After warping each image, I performed the averaging to find the mean face, stacking each of the images on top of each other and then dividing by the total number of images to get my result. The facial features of the average face are clearly defined.</p>
+        <p>To warp my face into the average, and the average into my face, I defined correspondences on the resulting average face and my face. Then, I defined a Delaunay triangulation based on the average face's keypoints and warped my face into the shape defined by the triangulation. I did the reverse as well, warping the average face into a Triangulation defined by the correspondences selected on my face. I had to resize the image of my face and the position of my face to match the average face closely, otherwise the warping did not give good results. Both images had a resolution of 640 x 480.</p>
+    </section>
+
+    <!-- Image grid section for Multi-Scale Alignments -->
+    
+    <div style="text-align: center;">
+        <p>Original images</p>
+    </div>
+
+    <section class="image-grid">
+        <!-- Row 2 -->
+        <div>
+            <img src="./media/face_data/01-1m.bmp" alt="Image 3">
+            <p class="image-caption">Original Person # 1</p>
+        </div>
+        <div>
+            <img src="./media/face_data/06-1m.bmp" alt="Image 3">
+            <p class="image-caption">Original Person # 3</p>
+        </div>
+        <div>
+            <img src="./media/face_data/07-1m.bmp" alt="Image 3">
+            <p class="image-caption">Original Person # 3</p>
+        </div>
+    </section>
+
+
+
+    <div style="text-align: center;">
+        <p>Morphed into population average</p>
+    </div>
+
+    <section class="image-grid">
+        <!-- Row 2 -->
+        <div>
+            <img src="./media/face_data_morphed/midway_image_0.jpg" alt="Image 3">
+            <p class="image-caption">Morphed Person # 1</p>
+        </div>
+        <div>
+            <img src="./media/face_data_morphed/midway_image_2.jpg" alt="Image 3">
+            <p class="image-caption">Morphed Person # 2</p>
+        </div>
+        <div>
+            <img src="./media/face_data_morphed/midway_image_3.jpg" alt="Image 3">
+            <p class="image-caption">Morphed Person # 3</p>
+        </div>
+    </section>
+
+
+    <div style="text-align: center;">
+        <img src="./media/face_data_morphed/average_face.jpg" alt="Averaged Mid-way Face" style="width: 18%; height: auto;">
+        <p class="image-caption">Averaged Population Face</p>
+    </div>
+
+    <section class="image-grid9">
+        <div>
+            <img src="./media/face_data_morphed/average_face.jpg" alt="Average Population Face">
+            <p class="image-caption">Averaged Population Face</p>
+        </div>
+        <div>
+            <img src="./media/vishal4 (1).jpg" alt="Vishal's Face">
+            <p class="image-caption">Vishal's Face</p>
+        </div>
+        <div>
+            <img src="./media/vishaltri.png" alt="Average Face">
+            <p class="image-caption">Average Face Triangulation</p>
+        </div>
+        <div>
+            <img src="./media/avgtri.png" alt="Vishal's Face">
+            <p class="image-caption">Vishal Face Triangulation</p>
+        </div>
+    </section>
+
+    <section class="image-grid2">
+        <div>
+            <img src="./media/average_to_vishal.jpg" alt="Average Population Face">
+            <p class="image-caption">Average warped to Vishal</p>
+        </div>
+        <div>
+            <img src="./media/vishal_to_average.jpg" alt="Vishal's Face">
+            <p class="image-caption">Vishal warped to Average</p>
+        </div>
+    </section>
+
+
+    <!-- Other Pictures from the Prokudin-Gorskii  section -->
+    <section class="context">
+        <h2>Part 5: Caricatures: Extrapolating from the mean</h2>
+        <p>Next, I extrapolated caricatures of my face from the population mean defined in the previous step. The way I did this was to first calculate the difference between the correspondences for the average face and my face selected in the previous parts. Then, I defined a parameter to control the strength of the caricature, which I set to 3. I multipled the difference by this parameter, and added the result to the average correspondence keypoints, creating a triangulation from these new keypoints.</p>
+        <p>Next, the warping process was similar to previous parts, where I computed an affine function mapping the correspondences for my face to the new keypoints defined in the previous paragraph, and warping my face into the triangulation defined by those new keypoints, resulting in a Caricature.</p>
+    </section>
+
+
+    <section class="image-grid">
+        <!-- Row 2 -->
+        <div>
+            <img src="./media/face_data_morphed/average_face.jpg" alt="Image 3">
+            <p class="image-caption">Average Population Face</p>
+        </div>
+        <div>
+            <img src="./media/vishal4 (1).jpg" alt="Image 3">
+            <p class="image-caption">Vishal's Face</p>
+        </div>
+        <div>
+            <img src="./media/vishal_caricature.jpg" alt="Image 3">
+            <p class="image-caption">Vishal Caricature</p>
+        </div>
+    </section>
+
+    <!-- Other Pictures from the Prokudin-Gorskii  section -->
+    <section class="context">
+        <h2>Part 6: Bells and Whistles</h2>
+        <p>TODO</p>
+    </section>
+
+
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Conclusion</h2>
+        <p>I had fun learning how to use affine transformations and Delaunay triangulations to manipulate images into unique shapes.</p>
+    </section>
+
+</body>
+</html>

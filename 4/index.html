@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS180 Project 4A: Image Warping and Mosaicing</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0 0 0;
+        }
+
+        header img {
+            width: 400px; /* Smaller box size */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+
+        header h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .author {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Styles for the context section */
+        .context {
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #ddd;
+        }
+
+        .context h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .context p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid41 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid41 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid17 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid17 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        
+
+        .image-grid9 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust min/max sizes */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid9 img {
+            width: 100%; /* Make sure images take up the full column width */
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin: 40px auto;
+        max-width: 800px;
+        }
+        .image-grid2 > div {
+            flex: 1;
+        }
+        .image-grid2 img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid3 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid5 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid4 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .centered-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            justify-content: center;
+        }
+        .centered-image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div style="text-align: center;">
+            <img src="./media/pano.jpg" alt="Averaged Mid-way Face" style="width: 25%; height: auto;">
+        </div>
+    </header>
+    
+
+    <header>
+        <h1>CS180 Project 4A: Image Warping and Mosaicing</h1>
+    </header>
+
+    <div class="author">
+        <p>By Vishal Bansal</p>
+    </div>
+
+    <section class="context">
+        <h2>Part 1: Shoot the Pictures</h2>
+        <p></p>
+    </section>
+
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/IMG_3033.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Berkeley Way West Left</p>
+        </div>
+        <div>
+            <img src="./media/IMG_3034.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Berkeley Way West Right</p>
+        </div>
+    </section>
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/IMG_3136.jpg" alt="Clooney Original Face">
+            <p class="image-caption">My Room Left</p>
+        </div>
+        <div>
+            <img src="./media/IMG_3137.jpg" alt="Pitt Original Face">
+            <p class="image-caption">My Room Right</p>
+        </div>
+    </section>
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/18.png" alt="Clooney Original Face">
+            <p class="image-caption">Minecraft Forest Left</p>
+        </div>
+        <div>
+            <img src="./media/39.png" alt="Pitt Original Face">
+            <p class="image-caption">Minecraft Forest Right</p>
+        </div>
+    </section>
+    
+    <section class="context">
+        <h2>Part 2: Recover Homographies</h2>
+    </section>
+
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/three_with_points.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Berkeley Way West Left Points</p>
+        </div>
+        <div>
+            <img src="./media/four_with_points.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Berkeley Way West Right Points</p>
+        </div>
+    </section>
+    <section class="image-grid" style="text-align: center;">
+
+        <div>
+            <img src="./media/six_with_points.jpg" alt="Clooney Original Face">
+            <p class="image-caption">My Room Left Points</p>
+        </div>
+        <div>
+            <img src="./media/seven_with_points.jpg" alt="Pitt Original Face">
+            <p class="image-caption">My Room Right Points</p>
+        </div>
+    </section>
+    <section class="image-grid" style="text-align: center;">
+
+        <div>
+            <img src="./media/mc1_with_points.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Minecraft Forest Lef Points</p>
+        </div>
+        <div>
+            <img src="./media/mc2_with_points.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Minecraft Forest Right Points</p>
+        </div>
+    </section>
+
+    
+    <section class="context">
+        <h2>Part 3: Warp Images</h2>
+    </section>
+
+    <section class="image-grid" style="text-align: center;">
+        <div>
+            <img src="./media/IMG_3033.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Berkeley Way West Left</p>
+        </div>
+        <div>
+            <img src="./media/warped_three_four.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Left warped to Right</p>
+        </div>
+        <div>
+            <img src="./media/IMG_3034.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Berkeley Way West Right</p>
+        </div>
+        <div>
+            <img src="./media/IMG_3136.jpg" alt="Pitt Original Face">
+            <p class="image-caption">My Room Left</p>
+        </div>
+        <div>
+            <img src="./media/warped_six_seven.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Left warped to Right</p>
+        </div>
+        <div>
+            <img src="./media/IMG_3137.jpg" alt="Pitt Original Face">
+            <p class="image-caption">My Room Right</p>
+        </div>
+        <div>
+            <img src="./media/18.png" alt="Pitt Original Face">
+            <p class="image-caption">Minecraft Left</p>
+        </div>
+        <div>
+            <img src="./media/warped_mc1_mc2.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Left warped to Right</p>
+        </div>
+        <div>
+            <img src="./media/39.png" alt="Pitt Original Face">
+            <p class="image-caption">Minecraft Right</p>
+        </div>
+    </section>
+   
+    <!-- Multi-Scale Alignments section -->
+    <section class="context">
+        <h2>Part 4: Image Rectification</h2>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+        <div>
+            <img src="./media/paintings2.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Museum Paintings</p>
+        </div>
+        <div>
+            <img src="./media/paintings2_with_points.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Rectangular Correspondences</p>
+        </div>
+    </section>
+
+
+    <div style="text-align: center;">
+        <img src="./media/paintings2result.png" alt="Averaged Mid-way Face" style="width: 26%; height: auto;">
+        <p class="image-caption">Rectified Painting</p>
+    </div>
+
+
+    <section class="context">
+        <h2>Part 5A: Creating Distance Transforms</h2>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/three.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Warped Left BWW on Canvas</p>
+        </div>
+        <div>
+            <img src="./media/four.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Right BWW on Canvas</p>
+        </div>
+        <div>
+            <img src="./media/dist_transform_3.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Distance Transform BWW Left</p>
+        </div>
+        <div>
+            <img src="./media/dist_transform_4.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Distance Transform BWW Right</p>
+        </div>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/six.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Warped Left Room on Canvas</p>
+        </div>
+        <div>
+            <img src="./media/seven.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Right Room on Canvas</p>
+        </div>
+        <div>
+            <img src="./media/dist_transform_6.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Distance Transform Room Left</p>
+        </div>
+        <div>
+            <img src="./media/dist_transform_7.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Distance Transform Room Right</p>
+        </div>
+    </section>
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/mc1.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Warped Left Forest on Canvas</p>
+        </div>
+        <div>
+            <img src="./media/mc2.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Right Forest on Canvas</p>
+        </div>
+        <div>
+            <img src="./media/dist_transform_mc1.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Distance Transform Forest Left</p>
+        </div>
+        <div>
+            <img src="./media/dist_transform_mc2.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Distance Transform Forest Right</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 5B: Blend using Distance Transforms</h2>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/low_pass_3.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Low Pass BWW Left</p>
+        </div>
+        <div>
+            <img src="./media/high_pass_a.png" alt="Pitt Original Face">
+            <p class="image-caption">High Pass BWW Left</p>
+        </div>
+        <div>
+            <img src="./media/low_pass_4.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Low Pass BWW Right</p>
+        </div>
+        <div>
+            <img src="./media/high_pass_b.png" alt="Pitt Original Face">
+            <p class="image-caption">High Pass BWW Right</p>
+        </div>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+        <div>
+            <img src="./media/low_pass_blend_34.png" alt="Clooney Original Face">
+            <p class="image-caption">BWW Low Pass Blend</p>
+        </div>
+        <div>
+            <img src="./media/high_pass_blend34.png" alt="Pitt Original Face">
+            <p class="image-caption">BWW High Pass Blend</p>
+        </div>
+    </section>
+
+
+    <div style="text-align: center;">
+        <img src="./media/final_3_4_blend.jpg" alt="Averaged Mid-way Face" style="width: 45%; height: auto;">
+        <p class="image-caption">BWW Mosaic</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/final_6_7_blend.jpg" alt="Averaged Mid-way Face" style="width: 45%; height: auto;">
+        <p class="image-caption">My room Mosaic</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/final_mc1_mc2_blend.jpg" alt="Averaged Mid-way Face" style="width: 45%; height: auto;">
+        <p class="image-caption">Minecraft Mosaic</p>
+    </div>
+    
+    <section class="context">
+        <h2>Conclusion</h2>
+    </section>
+
+</body>
+</html>

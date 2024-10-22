@@ -211,7 +211,9 @@
 
     <section class="context">
         <h2>Part 1: Shoot the Pictures</h2>
-        <p></p>
+        <p>I shot 3 sets of two photographs such that the transforms between the two sets of images were projective and swiveled to reveal elements of the scene that were not fully present in the first photo. While shooting the 3 sets of photos that I will create mosaics of, I fixed the center of projection (COP) and rotated my camera while capturing photos. This made it so that the photos in the set were captured at the same angles, just rotated, meaning that when stitched together, they would form a panorama!</p>
+        <p>One important detail to not that is present in the sets of the images below is the difference in exposure as a result of the imperfections of the iPhone 15 camera that I used to to shoot these images. That is why later on, when blending the images, to account for the differences in exposure and color, I will "blend" them instead of simply overlaying one upon the other. I also tried 2 sets of real-world images, and one set of minecraft images because I wanted to explore how the geometry and colors would differ from a real-world environment, and I thought it would be cool to experiment with a 3D computer video game.</p>
+        </p>
     </section>
 
     <section class="image-grid" style="text-align: center;">
@@ -247,6 +249,9 @@
     
     <section class="context">
         <h2>Part 2: Recover Homographies</h2>
+        <p>The next step was to take the two sets of photos, and recover the homography matrix used to map the points and geometry of the first left image to the right image. Then I used this homography to warp the left image into the geometry of the right image, creating two images (warped A and b) that could then be used to create a mosaic through blending and overlaying functions. </p>
+        <p>Using the correspondence tool, I defined correspondences (key points on key objects that I could use to map the orientation of one image to another). This included edges and vertices of prominent objects in the frame that I mentally used as a reference point in the warping and mosaic overlaying/blending process. Using a function computeH(im1_points, im2_points), I recovered the parameters of the transformation between each pair of images. I set up a linear system of equations Ah = b for each point pairing of correspondences that I had selected. I solved this system of equations using least squares (np.linalg.lstq) as it was underconstrained) to recover the homography vector parameters, which I then reshaped into a 3x3 matrix with 9th element of 1.0.</p>
+        <p></p>
     </section>
 
     <section class="image-grid" style="text-align: center;">
@@ -285,6 +290,8 @@
     
     <section class="context">
         <h2>Part 3: Warp Images</h2>
+        <p>Now that I had calculated the parameters of the homography matrix, I used the homography matrix I had calculated to warp one image in each set towards the reference image. In my case, since the homography matrix for each set mapped correspondences going from left to right, I set the right image as a reference, and warped the left image into the right image's shape. I wrote a function warpImage(image, H) which warped the input image according to the homography matrix H.</p>
+        <p>I first warped all 4 corners in the original image "a" space into the "b" space using the homography matrix. This resulted in negative values, so instead of directly using the corners, I created a bounding box using the warped corner values with a width and height of max_y - min_y, max_x - min_x. After this process was complete, I looped through all the pixels in the bounding box, applying the offset of min_x, min_y that I had previously calculated, and used an inverse Homography Matrix H' to map those "b" points back to the "a" space. If the inverted points were in bounds of the "a" space, then I sampled the "a" color from that pixel, and set it equal to that value in the warped image, thus creating a warped image. The pixels without values were marked as 0.0, which you can see in the black space.</p>
     </section>
 
     <section class="image-grid" style="text-align: center;">
@@ -329,6 +336,7 @@
     <!-- Multi-Scale Alignments section -->
     <section class="context">
         <h2>Part 4: Image Rectification</h2>
+        <p>To test my warping and homography matrix calculaton functions, I utilized a picture of museum (I believe the Met) at a slanted angle, showcasing paintings at a wall at the slight slanted angle of the phone. I then warped the four corners of the painting (selected as correspondences), including the frame as I thought the frame looked cool, into a default rectangular shape like [0, 0], [200, 500], [0, 200], [500, 0]. Using these correspondences and image, I performed the same warping process as before using my computeHomography() and imWarp() functions to rectify the painting into a flat shape. The result is displayed below! </p>
     </section>
 
     <section class="image-grid17" style="text-align: center;">
@@ -351,6 +359,7 @@
 
     <section class="context">
         <h2>Part 5A: Creating Distance Transforms</h2>
+        <p>The first step in overlaying/blending the warped A and b images that we created in Part 3 smoothly is to create Distance Transform graphs, which are basically graphs which indicate how close the nearest 0 pixel is. I used the cv2.distanceTransform function (equivalent to bwdist in MatLab) along with a binary mask of 1s and 0s overlaying the image placed onto the canvas to create the distance transforms displayed below. To explain what I mean by "image" on canvas, I created a canvas for the mosaic with size (image_a.width + image_b.width) and (image_a.height and image_b.width). I created a np.zeros() array with this size. This was my canvas. Then I overlayed each of the warped images on the canvas (the warped_a image was translated back to the original and aligned using the min_x, min_y offsets I had calculated previously). I then created distance transforms on the aligned, warped photos on the canvas, resulting in the graphs below. </p>
     </section>
 
     <section class="image-grid41" style="text-align: center;">
@@ -410,7 +419,10 @@
     </section>
 
     <section class="context">
-        <h2>Part 5B: Blend using Distance Transforms</h2>
+        <h2>Part 5B: Blend the images into a mosaic</h2>
+        <p>I used low and high frequencies and filters to perform the blending that fixed the issues of differing exposure and sharp boundaries between the two images after overlaying, resulting in a smooth, cohesive panorama. The first step was to create the high and low frequency versions of both of the images that were to be in the mosaic. I did this by using a similar technique to Project 2, where I convolved the image with a 2D Gaussian Kernel to get the low frequency version, which was blurred and contained the colors and higher level details of the image. Then to get the high frequency image, I subtracted the low frequency image from the original image, resulting in only the higher frequencies remaining. I did this for all 3 sets of images.</p>
+        <p>I then blended the low and high frequency pairs of all the sets of the images, as displayed below, resulting in a lower frequency blend and a higher frequency blend. As you can see, the finer details and edge information is contained in the high frequency blend, while the low frequency blend contains the higher level details and color gradients. I merged the high frequency images by comparing at each pixel, which distance transform had a greater value (higher distance to a 0 pixel, as intuitively this pixel then was closer to the middle of the picture and not the edges). I blended the lower frequency elements by normalizing the distance transforms to create weights that I then applied to each pixel of the low_pass frequency warped A and b, adding them together adjusted by the weights to create a low pass blend. Then, the final step was to add the low frequency and high frequency blends that resulted in the final mosaics below! I attempted to use Laplacian stacks to blend, but ultimately found this method of blending resulted in a smoother blended image with improved performance.</p>
+        <p>The intermediate high and low frequency blends for each set, alongside the low and high frequency warped A and b's for each set of images are contained in the media folder on my github repository. I chose not to include them here for the other two sets, as the website already had quite a few imgs, and course staff announced they'd like it if the website was not difficult to scroll through on Ed. But if you'd like to take a look, they are there!</p>
     </section>
 
     <section class="image-grid41" style="text-align: center;">
@@ -461,7 +473,7 @@
     
     <section class="context">
         <h2>Conclusion</h2>
+        <p>I had fun experimenting with different geometries to blend images into mosaics!</p>
     </section>
-
 </body>
 </html>

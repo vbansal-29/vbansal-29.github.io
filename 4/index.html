@@ -337,6 +337,7 @@
     <section class="context">
         <h2>Part 4: Image Rectification</h2>
         <p>To test my warping and homography matrix calculaton functions, I utilized a picture of museum (I believe the Met) at a slanted angle, showcasing paintings at a wall at the slight slanted angle of the phone. I then warped the four corners of the painting (selected as correspondences), including the frame as I thought the frame looked cool, into a default rectangular shape like [0, 0], [200, 500], [0, 200], [500, 0]. Using these correspondences and image, I performed the same warping process as before using my computeHomography() and imWarp() functions to rectify the painting into a flat shape. The result is displayed below! </p>
+        <p>For my second example of rectification, I rectified the neighboring painting of George Washington (I think) in the same picture into a flat square surface as well. (In contrast to the previous painting, which was rectangular, so correspondences had to be adjusted.)</p>
     </section>
 
     <section class="image-grid17" style="text-align: center;">
@@ -351,10 +352,18 @@
     </section>
 
 
+
     <div style="text-align: center;">
         <img src="./media/paintings2result.png" alt="Averaged Mid-way Face" style="width: 26%; height: auto;">
         <p class="image-caption">Rectified Painting</p>
     </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/paintings22result.png" alt="Averaged Mid-way Face" style="width: 15%; height: auto;">
+        <p class="image-caption">Rectified Painting 2</p>
+    </div>
+
 
 
     <section class="context">

@@ -337,7 +337,6 @@
     <section class="context">
         <h2>Part 4: Image Rectification</h2>
         <p>To test my warping and homography matrix calculaton functions, I utilized a picture of museum (I believe the Met) at a slanted angle, showcasing paintings at a wall at the slight slanted angle of the phone. I then warped the four corners of the painting (selected as correspondences), including the frame as I thought the frame looked cool, into a default rectangular shape like [0, 0], [200, 500], [0, 200], [500, 0]. Using these correspondences and image, I performed the same warping process as before using my computeHomography() and imWarp() functions to rectify the painting into a flat shape. The result is displayed below! </p>
-        <p>For my second example of rectification, I rectified the neighboring painting of George Washington (I think) in the same picture into a flat square surface as well. (In contrast to the previous painting, which was rectangular, so correspondences had to be adjusted.)</p>
     </section>
 
     <section class="image-grid17" style="text-align: center;">
@@ -479,10 +478,169 @@
         <img src="./media/final_mc1_mc2_blend.jpg" alt="Averaged Mid-way Face" style="width: 45%; height: auto;">
         <p class="image-caption">Minecraft Mosaic</p>
     </div>
-    
+
+    <header>
+        <h1>CS180 Project 4B: Feature Matching for Autostitching</h1>
+    </header>
+
+    <section class="context">
+        <h2>Harris Interest Point Detector</h2>
+        <p>Using the Harris corner detection code provided in the spec, alongside parameters of sigma, min_distance (which determines the minimum distance between Harris points detected), and a threshold which thresholds based on the strength of the Harris corner points that were detected. These points can be controlled in terms of density and number based on the parameters explained. As you can see, the Harris points are not well distributed – they are closely packed together, which the ANMS will solve. Also, they are not one to one correspondences between these points, because the Harris corner detection process was performed separately on each image, and feature matching will solve this problem. But the combination of the threshold, sigma, and min distance parameters, combined with the Harris detection algorithm leads to points along prominent edges and contours in the image.</p>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+
+        <div>
+            <img src="./media/h1.png" alt="Clooney Original Face">
+            <p class="image-caption">BWW Left Harris Points</p>
+        </div>
+        <div>
+            <img src="./media/h2.png" alt="Pitt Original Face">
+            <p class="image-caption">BWW Right Harris Points</p>
+        </div>
+    </section>
+    <!-- <section class="image-grid" style="text-align: center;">
+
+        <div>
+            <img src="./media/c.png" alt="Clooney Original Face">
+            <p class="image-caption">My Room Left Points</p>
+        </div>
+        <div>
+            <img src="./media/c2.png" alt="Pitt Original Face">
+            <p class="image-caption">My Room Right Points</p>
+        </div>
+    </section>
+    <section class="image-grid" style="text-align: center;">
+
+        <div>
+            <img src="./media/d.png" alt="Clooney Original Face">
+            <p class="image-caption">Minecraft Forest Lef Points</p>
+        </div>
+        <div>
+            <img src="./media/e.png" alt="Pitt Original Face">
+            <p class="image-caption">Minecraft Forest Right Points</p>
+        </div>
+    </section> -->
+
+    <section class="context">
+        <h2>Adaptive Non-Maximal Suppression</h2>
+        <p>Adaptive Non-Maximal Suppression is a method I applied to the Harris points from the last resulting step to spatially distribute the Harris points, as close by points encode redundant information. To accomplish this, for each point, I calculated the distance to the nearest point that had a stronger corner strength than it, which I set as the radius of that specific point. Through this approach, the radius also encodes harris strengths as the strongest point will have an infinite radius, as there is no point with a stronger Harris strength. Then, I chose the 100 strongest points in terms of the radii I calculated, suppressing the Harris points effectively using ANMS.</p>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+
+        <div>
+            <img src="./media/anms.png" alt="Clooney Original Face">
+            <p class="image-caption">BWW Left ANMS Points</p>
+        </div>
+        <div>
+            <img src="./media/anm2.png" alt="Pitt Original Face">
+            <p class="image-caption">BWW Right ANMS Points</p>
+        </div>
+    </section>
+    <!-- <section class="image-grid" style="text-align: center;">
+
+        <div>
+            <img src="./media/c1.png" alt="Clooney Original Face">
+            <p class="image-caption">My Room Left Points</p>
+        </div>
+        <div>
+            <img src="./media/d1.png" alt="Pitt Original Face">
+            <p class="image-caption">My Room Right Points</p>
+        </div>
+    </section>
+    <section class="image-grid" style="text-align: center;">
+
+        <div>
+            <img src="./media/e1.png" alt="Clooney Original Face">
+            <p class="image-caption">Minecraft Forest Lef Points</p>
+        </div>
+        <div>
+            <img src="./media/f1.png" alt="Pitt Original Face">
+            <p class="image-caption">Minecraft Forest Right Points</p>
+        </div>
+    </section> -->
+
+    <section class="context">
+        <h2>Feature Descriptor Extraction & Feature Matching</h2>
+        <p>The next step was to match the points between the two images, as the processes so far on both images to automatically extract correspondences. I created a 8x8 patch sampled every 5 pixels starting from -17.5 pixels away, creating a 40 x 40 pixel patch around each of the points in the images. Then at each 5 point interval, I sampled the original image. This resulted in, for each feature point, a 64-point feature vector that can then be used for matching. Then using the dist2 function, I created a 100x100 matrix containing the distances between each of the feature vectors created in the previous step. THen I picked the points which satisfied the ratio test (if sorted_similarity[0] < 0.8 * sorted_similarity[1]) comparing the nearest neighbor with the second nearest neighbor resulting in a set of feature matched correspondences between both images. Then, this set can be further improved by the RANSAC method which calculates homography on the a randomly sampled set of points.</p>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+
+        <div>
+            <img src="./media/r1.png" alt="Clooney Original Face">
+            <p class="image-caption">BWW Left Features</p>
+        </div>
+        <div>
+            <img src="./media/r2.png" alt="Pitt Original Face">
+            <p class="image-caption">BWW Right Features</p>
+        </div>
+    </section>
+
+
+    <section class="context">
+        <h2>4 point RANSAC</h2>
+        <p>RANSAC is a method where I randomly selected 4 points from the matched feature set of correspondences between the A and B images. Then using this 4 point subset of the larger overall set of feature matched points, I computed the homography matrix mapping the A points to the B points space, similar to the Project 4A to essentially calculate a homography matrix that can be used to warp the image A into the image B space and form a mosaic through blending. After calulating the random 4 point set's Homography matrix, I then looped through all of the points in the feature matched set and project the A points to the B points space using the homography matrix. If the projected A point was within a distance threshold of 3 from the B point that it was feature matched too, then I added it to the result. I ran this RANSAC (random) algorithm for a total of 500 iterations, and picked the result which led to the most number of points being within the distance threshold that I had specified. Then in the next warping system, the homography matrix is computed using this result set of points between A and B!</p>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+
+        <div>
+            <img src="./media/f11.png" alt="Clooney Original Face">
+            <p class="image-caption">BWW Left after RANSAC</p>
+        </div>
+        <div>
+            <img src="./media/f12.png" alt="Pitt Original Face">
+            <p class="image-caption">BWW Right after RANSAC</p>
+        </div>
+    </section>
+
+
+    <section class="context">
+        <h2>Comparison between auto and manual stitching</h2>
+        <p>These are the comparisons between the automatically stitched panoramas where using Harris corner detection, ANMS point suppression based on point radii, Feature extraction and matching, and the RANSAC homography method. The combination of these methods allowed us to discover new correspondences between the two images to create the mosaic. In contrast, the images with manual correspondences followed a similar format in the process of warping the images and computing the homographies, but the process of the manually selecting point correspondences using the online tool was replaced. They both are similar in the sense of orientation and the mosaic's frame, but there are slight tweaks and modifications in shape and color of the image's warping. The Minecraft picture in particular has a lot of sharp edges and contours, which I believe may have contributed to the autostitched and manual mosaics being similar.</p>
+    </section>
+
+
+    <section class="image-grid17" style="text-align: center;">
+
+        <div>
+            <img src="./media/final_3_4_blend.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Manual BWW</p>
+        </div>
+        <div>
+            <img src="./media/auto_34.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Auto Stitched BWW</p>
+        </div>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+
+        <div>
+            <img src="./media/final_6_7_blend.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Manual My Room</p>
+        </div>
+        <div>
+            <img src="./media/auto_67.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Auto Stitched My Room</p>
+        </div>
+    </section>
+
+    <section class="image-grid17" style="text-align: center;">
+        <div>
+            <img src="./media/final_mc1_mc2_blend.jpg" alt="Clooney Original Face">
+            <p class="image-caption">Manual Minecraft</p>
+        </div>
+        <div>
+            <img src="./media/auto_mc1_mc2.jpg" alt="Pitt Original Face">
+            <p class="image-caption">Auto Stitched Minecraft</p>
+        </div>
+    </section>
+
     <section class="context">
         <h2>Conclusion</h2>
-        <p>I had fun experimenting with different geometries to blend images into mosaics!</p>
+        <p>I had fun experimenting with different geometries to blend images into mosaics! The most important thing I learnt during part A was how to use low and high frequency passes of images using 2D Gaussians to blend images smoothly as an alternative to Laplacian stacks. The most important thing I learnt during part B was how to use RANSAC to randomly sample points to extract a homography out of auto defined correspondences!</p>
     </section>
 </body>
 </html>

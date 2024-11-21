@@ -1,1 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS180 Project 5</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
 
+        header {
+            text-align: center;
+            padding: 20px 0 0 0;
+        }
+
+        header img {
+            width: 400px; /* Smaller box size */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+
+        header h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .author {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Styles for the context section */
+        .context {
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #ddd;
+        }
+
+        .context h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .context p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid41 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid41 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid413 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid413 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid4136 {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid4136 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid17 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid17 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        
+
+        .image-grid9 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust min/max sizes */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid9 img {
+            width: 100%; /* Make sure images take up the full column width */
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin: 40px auto;
+        max-width: 800px;
+        }
+        .image-grid2 > div {
+            flex: 1;
+        }
+        .image-grid2 img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid3 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid5 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid4 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .centered-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            justify-content: center;
+        }
+        .centered-image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div style="text-align: center;">
+            <img src="./media/bear.png" alt="Averaged Mid-way Face" style="width: 13%; height: auto;">
+        </div>
+    </header>
+    
+
+    <header>
+        <h1>CS180 Project 5A:  The Power of Diffusion Models</h1>
+    </header>
+
+    <div class="author">
+        <p>By Vishal Bansal</p>
+    </div>
+
+    <section class="context">
+        <h2>Part 0: Setup</h2>
+        <p>For Setup, I setup the DeepFloyd IF diffusion model on Huggingface. DeepFloyd is a two stage model trained by Stability AI. The first stage produces images of size  64×64  and the second stage takes the outputs of the first stage and generates images of size  256×256. I made a Huggingface account, logged in, accepted the license on the model card, and generated a Hugging face Access Token that I could use in my Colab notebook to use the Diffusion Model. Because the text encoder is very large, I used a set of precomputed text embeddings to run the Diffusion Model.</p>
+        <p>The random seed I am using is 180 - I did not change the seed from its default value set in the Colab. I ran the DeepFloyd Diffusion model on three text prompts, as DeepFloyd was trained as a text-to-image model, and the results are displayed. Below are reflections on the quality of the outputs and their relationships to the text prompts.</p>
+
+        <p>1) an oil painting of a snowy mountain village: The quality of the image generated is high, as there are many fine details such as a replication of the Aurora Borealis in the sky – a phenomenon present in colder regions – and also the placement of snow on flat surfaces like the branches of the trees and the ceiling. The presence of a oil-like texture is also evident, which reflects the original text prompt as well. The quality and relation to the prompt are very high.</p>
+        <p>2) a man wearing a hat: This text prompt is vague, and the model does a great job extrapolating an image from the vague prompt that satisfies all the details. It is a man wearing a hat and the quality is high. I found it interesting how the model was able to extrapolate a type of hat and expression for the Man from just the vague prompt.</p>
+        <p>3) a rocket ship: The quality and the relation to the prompt are both high. This is a simple prompt, and a simple image results, where the model does not over-extrapolate, and generates a simple image of a rocket flying. The finer detailing like the reflection of light on the Metallic rocket surface alongside the cloud created by the flames is also high quality.</p>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/snowhouse.png" alt="Clooney Original Face">
+            <p class="image-caption">an oil painting of a snowy mountain village</p>
+        </div>
+        <div>
+            <img src="./media/manhat.png" alt="Pitt Original Face">
+            <p class="image-caption">a man wearing a hat</p>
+        </div>
+        <div>
+            <img src="./media/rocket.png" alt="Pitt Original Face">
+            <p class="image-caption">a rocket ship</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1: Sampling Loops</h2>
+        <p>In this part of the project, I wrote my own sampling loops that use pretrained DeepFloyd denoisers to produce high quality images. I then modified these sampling loops to perform tasks like inpainting and optical illusion. A diffusion model reverses this process by denoising an image at each timestep, eventually arriving at t=0 with a prediction of the original image without noise.</p>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.1: Implementing the Forward Process</h2>
+        <p>I implemented the noisy_im = forward(im, t) function. A key part of diffusion is the forward process, which takes a clean image and adds noise to it, defined by q(x_t|x_0) = N(x_t; sqrt(a) * x_0, (1 - a)I). Given coefficients alpha for each timestep t (the alphas_cumprod variable) dictating how the noise augments the image and a clean image x_0, we get noisy image x_t by sampling from a Gaussian with mean sqrt(a) * x_0 and variance (1 - a)I. As can be seen in the equation, the forward process not only adds noise, it also scales the image. Below the results for t = [250, 500, 750] are shown, and at increasing timesteps, the image gets noisier.</p>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">original campanile</p>
+        </div>
+        <div>
+            <img src="./media/250.png" alt="Clooney Original Face">
+            <p class="image-caption">t=250</p>
+        </div>
+        <div>
+            <img src="./media/500.png" alt="Pitt Original Face">
+            <p class="image-caption">t=500</p>
+        </div>
+        <div>
+            <img src="./media/750.png" alt="Pitt Original Face">
+            <p class="image-caption">t=700</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.2: Classical Denoising</h2>
+        <p>Next, I tried to denoise the forward images I created in Part 1.1 using a classical method of Gaussian Blur Filtering, while convolves a Gaussian Kernel Filter with a Standard Deviation value, smoothing out high frequency elements of an image, and theoretically smoothing out the noise we added during the forward process. But as you can see in the results, it gets harder and more difficult to denoise the image using the Classical denoising method as timestep t increases in the forward process, leading to not the best possible results. This can be intuitively understood as the noise becomes the pixel value of the image in the image array, so as the Gaussian Filter attempts to smooth the noise, it has less and less real image data values to pull from. I used the torchvision.transforms.functional.gaussian_blur library.</p>
+    </section>
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">original campanile</p>
+        </div>
+        <div>
+            <img src="./media/250.png" alt="Clooney Original Face">
+            <p class="image-caption">t=250</p>
+        </div>
+        <div>
+            <img src="./media/500.png" alt="Pitt Original Face">
+            <p class="image-caption">t=500</p>
+        </div>
+        <div>
+            <img src="./media/750.png" alt="Pitt Original Face">
+            <p class="image-caption">t=700</p>
+        </div>
+    </section>
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/.png" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/250g.png" alt="Clooney Original Face">
+            <p class="image-caption">t=250 gaussian denoised</p>
+        </div>
+        <div>
+            <img src="./media/500g.png" alt="Pitt Original Face">
+            <p class="image-caption">t=500 gaussian denoised</p>
+        </div>
+        <div>
+            <img src="./media/750g.png" alt="Pitt Original Face">
+            <p class="image-caption">t=700 gaussian denoised</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.3: One-Step Denoising</h2>
+        <p>Now instead of using a classical denoising method of Gaussian Blurring, I used a pretrained Diffusion Model to denoise the image. This UNet has already been trained on a large dataset of (x_0, x_t) images so intuitively it already has information on how the noise is placed into the image, and how different patterns of noise correspond to the original image. This means I can use it to denoise the image at different timesteps t in the forward process. The UNet recovers Gaussian Noise in the image, and then we can use that noise to recover an estimate of the original image. As the Diffusion model was trained with text conditioning, we also need a text prompt embedding, so I use "a high quality photo". This is known as a one-step denoising process with a UNet, as we are estimating the original image from timestep t in one step rather than gradually estimating the original image at each timestep t to t-1. The results are displayed below, and you can tell that in comparison to the Gaussian Classically denoised photos above, the UNet is able to recover a lot more detail and reduce the amount of noise present significantly. However, it still is under par and we can get better results and more finer detailing and edges with iterative denoising. </p>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">original campanile</p>
+        </div>
+        <div>
+            <img src="./media/250.png" alt="Clooney Original Face">
+            <p class="image-caption">t=250</p>
+        </div>
+        <div>
+            <img src="./media/500.png" alt="Pitt Original Face">
+            <p class="image-caption">t=500</p>
+        </div>
+        <div>
+            <img src="./media/750.png" alt="Pitt Original Face">
+            <p class="image-caption">t=700</p>
+        </div>
+    </section>
+
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/.png" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/250o.png" alt="Clooney Original Face">
+            <p class="image-caption">t=250 one-step denoised</p>
+        </div>
+        <div>
+            <img src="./media/500o.png" alt="Pitt Original Face">
+            <p class="image-caption">t=500 one-step denoised</p>
+        </div>
+        <div>
+            <img src="./media/750o.png" alt="Pitt Original Face">
+            <p class="image-caption">t=700 one-step denoised</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.4: Iterative Denoising</h2>
+        <p>In part 1.3, we see that the denoising UNet does a much better job of projecting the image onto the natural image manifold, and recovering details from the noised images resulting from the Forward processes in comparison to the classical Denoising Methods of using Gaussian Blur Kernels. However, the effectiveness one-step denoising method using a UNet decreases as the timestep t in the forward process increases and more noise is added to the images.
+            In this part, we design a diffusion model to denoise the image iteratively rather than just using one step.            
+            Since Diffusion models are designed to denoise iteratively, instead of denoising iteratively at each individual step however, which would be computationally intensive and expensive, I denoised at strided timesteps T which skip timesteps in the range(start, end) with a defined stride.
+            On the ith denoising step we are at  strided_timesteps[i], and want to get to  strided_timesteps[i+1] (from more noisy to less noisy as the strided timesteps array starts from the end and goes to t=0 or a clean image). 
+            We can think of this process as a linear interpolation between the signal and noise. As you can see in the results, the iteratively denoised result is better than the one-step and Gaussian results, as it has more detailing around the trees and structures.</p>
+        <p>The equation for this process that I used is below:
+            $$x_{t'} = \frac{\sqrt{\bar{\alpha}_t \beta_t}}{1 - \bar{\alpha}_t} x_0 + \frac{\sqrt{\alpha_t (1 - \bar{\alpha}_t)}}{1 - \bar{\alpha}_t} x_t + \nu_\sigma$$</p>
+    </section>
+
+    <section class="image-grid413" style="text-align: center;">
+        <div>
+            <img src="./media/90.png" alt="Pitt Original Face">
+            <p class="image-caption">t=90</p>
+        </div>
+        <div>
+            <img src="./media/240.png" alt="Pitt Original Face">
+            <p class="image-caption">t=240</p>
+        </div>
+        <div>
+            <img src="./media/390.png" alt="Pitt Original Face">
+            <p class="image-caption">t=390</p>
+        </div>
+        <div>
+            <img src="./media/540.png" alt="Pitt Original Face">
+            <p class="image-caption">t=540</p>
+        </div>
+        <div>
+            <img src="./media/t=690.png" alt="Pitt Original Face">
+            <p class="image-caption">t=690</p>
+        </div>
+    </section>
+
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">original campanile</p>
+        </div>
+        <div>
+            <img src="./media/1.4i.png" alt="Pitt Original Face">
+            <p class="image-caption">Iteratively Denoised</p>
+        </div>
+        <div>
+            <img src="./media/1.4o.png" alt="Pitt Original Face">
+            <p class="image-caption">One Step Denoised</p>
+        </div>
+        <div>
+            <img src="./media/1.4g.png" alt="Clooney Original Face">
+            <p class="image-caption">Gaussian Blurred Denoised</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.5: Diffusion Model Sampling</h2>
+        <p> In part 1.4, I used the diffusion model to denoise an image iteratively. Another thing we can do with the iterative_denoise function that I wrote is to generate images from scratch. I did this by setting the i_start variable = 0 and passing in random noise as the original image to denoise, meaning there was no clear starting point from which the model was to denoise, resulting in the ability to recover a whole new image from the random noise! The prompt for the text embedding used is again "a high quality photo". 5 results denoising pure noise into new images are displayed below. The quality isn't super good, as we will see in the next section, but it still produces respectable, comphrensive output.</p>
+    </section>
+
+    <section class="image-grid413" style="text-align: center;">
+        <div>
+            <img src="./media/1.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/2.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/3.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/4.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/5.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+    </section>
+
+
+    <section class="context">
+        <h2>Part 1.6: Classifier-Free Guidance (CFG)</h2>
+        <p>The generated images in the previous part which iteratively denoised pure random noise created by torch.randn were not very clear, and realistic, not reflecting real-world scenarios, and at times being abstract. To improve image quality, while decreasing image diversity, I used a technique known as a CFG (classifier free guidance). In CFG, as an extra step to 1.5's iterative denoising function, we compute a unconditional and conditional noise estimate. We then let our new noise estimate be calculated according to a scale s: new noise est = uncond noise est + (1 - scale) * cond noise est, and when scale > 1, you get high quality images. I used the null prompt "" for the unconditional noise estimate for CFG. The results below as you can see are significantly more clear, coherent, and realistic.</p>
+    </section>
+            
+    <section class="image-grid413" style="text-align: center;">
+        <div>
+            <img src="./media/1a.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/2a.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/3a.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/4a.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/5a.png" alt="Pitt Original Face">
+            <p class="image-caption"></p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.7: Image-to-image Translation</h2>
+        <p>In part 1.4, we take a real image, add noise to it, and then after that is complete, we denoise. Intuitively, because of the noise, our model does not exactly recover the original image, rather it "guesses" or "estimates" portions of the image that were noised using its training data set. This effectively allows us to make edits to existing images by adding noise to them, and then iteratively denoising. This effectively allows us to make edits to existing images. The more noise we add, the larger the edit will be. The DeepFloyd diffusion model estimates new features and edits as it iteratively denoises the image under CFG (classifier free guidance).
+           In part 1.7, I took the original test image (along with 2 images of my choosing representing other historical monuments), noised them using our Forward process, and then denoised them using our iterative_denoise_cfg at different starting indices [1, 3, 5, 7, 10, 20], and the results are displayed below. This gives a range of images which gradually look more like the original image, as we have more timesteps to iteratively denoise in the iterative_denoise_cfg function.</p>
+        </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Campanile</p>
+        </div>
+        <div>
+            <img src="./media/1.71.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1</p>
+        </div>
+        <div>
+            <img src="./media/1.72.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/1.73.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/1.74.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/1.75.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/1.76.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/ogben.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Big Ben</p>
+        </div>
+        <div>
+            <img src="./media/1b.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1</p>
+        </div>
+        <div>
+            <img src="./media/3b.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/5b.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/7b.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/10b.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/20b.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/eog.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Eiffel Tower</p>
+        </div>
+        <div>
+            <img src="./media/e1.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1</p>
+        </div>
+        <div>
+            <img src="./media/e2.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/e3.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/e4.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/e5.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/e6.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.7.1: Editing Hand-Drawn and Web Images</h2>
+        <p>We can run the same procedure on nonrealistic images (cartoons, hand-drawn images) and project them onto the natural image manifold. We start by noising the images using the Forward process which samples random noise using torch.randn, and then iteratively denoising the images at different start indices using CFG (classifier free guidance) to effectively make edits to our images. Similar to the previous part, we generate ranges of images which gradually start to resemble the original image more, as there are more timesteps to iteratively denoise the image. I downloaded one image of a Strawberry off the web, as I wanted to see how our algorithm handled the general, oval shape of a Strawberry, and I hand drew two rectangular images of a house and a TV to see how the model would handle rectangular images. I ran the algorithm for the same noise levels as above [1, 3, 5, 7, 10, 20] while also adding 25, as I wanted to experiment with a higher start index to see its effect (it led to similar images to the originals). The hand drawn images were center cropped so there is a bit of warping present in dimensions.</p>
+    </section>
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/ogstraw.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Strawberry</p>
+        </div>
+        <div>
+            <img src="./media/1s.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1</p>
+        </div>
+        <div>
+            <img src="./media/3s.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/5s.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/7s.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/10s.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/20s.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/ogtv.png" alt="Pitt Original Face">
+            <p class="image-caption">Original TV</p>
+        </div>
+        <div>
+            <img src="./media/1t.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1</p>
+        </div>
+        <div>
+            <img src="./media/3t.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/5t.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/7t.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/10t.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/20t.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/ogrocket.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Rocket</p>
+        </div>
+        <div>
+            <img src="./media/1r.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1</p>
+        </div>
+        <div>
+            <img src="./media/3r.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/5r.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/7r.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/10r.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/20r.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/.png" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/.png" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/25s.png" alt="Pitt Original Face">
+            <p class="image-caption">Strawberry 25</p>
+        </div>
+        <div>
+            <img src="./media/25t.png" alt="Pitt Original Face">
+            <p class="image-caption">TV 25</p>
+        </div>
+        <div>
+            <img src="./media/25r.png" alt="Pitt Original Face">
+            <p class="image-caption">Rocket 25</p>
+        </div>
+        <div>
+            <img src="./media/.png" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/.png" alt="">
+            <p class="image-caption"></p>
+        </div>
+    </section>
+
+    
+    <section class="context">
+        <h2>Part 1.7.2: Inpainting</h2>
+        <p>We can use the same procedure as the previous parts to implement inpainting following the RePaint paper. We can repaint just a single section of the image using a binary mask, with 0s and 1s – with 1s in the original image area and 0s in the area you want to replace. You then use (1 - binary mask) to set the pixels in the area you want to replace which is output from the iterative denoising function. This leads to the equation x_t <- x_t*m + (1-m)*forward(x_0, t). Then you denoise the resulting image from the mask, so the original image is preserved, intuitively just "repainting" one area.
+Below, I inpainted three images (the test image of the Campanile alongside two images of my choosing). I modified the size and position of the masks to inpaint the images in unique ways. The results are displayed below.            </p>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Campanile</p>
+        </div>
+        <div>
+            <img src="./media/mcp.png" alt="Pitt Original Face">
+            <p class="image-caption">Mask Campanile</p>
+        </div>
+        <div>
+            <img src="./media/rcp.png" alt="Pitt Original Face">
+            <p class="image-caption">To Replace Campanile</p>
+        </div>
+        <div>
+            <img src="./media/icp.png" alt="Pitt Original Face">
+            <p class="image-caption">Inpainted Campanile</p>
+        </div>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogb.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Big Ben</p>
+        </div>
+        <div>
+            <img src="./media/mcb.png" alt="Pitt Original Face">
+            <p class="image-caption">Mask Big Ben</p>
+        </div>
+        <div>
+            <img src="./media/rcb.png" alt="Pitt Original Face">
+            <p class="image-caption">To Replace Big Ben</p>
+        </div>
+        <div>
+            <img src="./media/icb.png" alt="Pitt Original Face">
+            <p class="image-caption">Inpainted Big Ben</p>
+        </div>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/ogl.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Lebron</p>
+        </div>
+        <div>
+            <img src="./media/lcm.png" alt="Pitt Original Face">
+            <p class="image-caption">Mask Lebron</p>
+        </div>
+        <div>
+            <img src="./media/lcr.png" alt="Pitt Original Face">
+            <p class="image-caption">To Replace Lebron</p>
+        </div>
+        <div>
+            <img src="./media/lci.png" alt="Pitt Original Face">
+            <p class="image-caption">Lebron with Sunglasses</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.7.3: Text-Conditional Image-to-image Translation</h2>
+        <p>In this part, we run the same algorithm as SDEdit, but with an additional step of guiding the projection and result of the iterative denoising function with a text prompt. As a result, the algorithm is no longer a "pure" projection to the natural image manifold, as it also adds control using language. The prompt I used was "a rocket ship", which was a precomputed text embedding, as it is computationally intensive to compute one ourselves on the Google Colab with CPU limits. In summary, I changed the prompt from "a high quality photo" to "a rocket ship" to generate a range of images which gradually transition from a rocket to the original image, run on 3 images.</p>
+            
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/r1.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1 -> Rocket</p>
+        </div>
+        <div>
+            <img src="./media/r3.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/r5.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/r7.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/r10.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/r20.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+        <div>
+            <img src="./media/ogtest.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Campanile</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/b1.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1 -> Rocket</p>
+        </div>
+        <div>
+            <img src="./media/b3.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/b5.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/b7.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/b10.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/b20.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+        <div>
+            <img src="./media/ogb.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Big Ben</p>
+        </div>
+    </section>
+
+    <section class="image-grid4136" style="text-align: center;">
+        <div>
+            <img src="./media/l11.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 1 -> Rocket</p>
+        </div>
+        <div>
+            <img src="./media/l31.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 3</p>
+        </div>
+        <div>
+            <img src="./media/l51.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 5</p>
+        </div>
+        <div>
+            <img src="./media/l7.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 7</p>
+        </div>
+        <div>
+            <img src="./media/l10.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 10</p>
+        </div>
+        <div>
+            <img src="./media/l20.png" alt="Pitt Original Face">
+            <p class="image-caption">Start Index 20</p>
+        </div>
+        <div>
+            <img src="./media/ogli.png" alt="Pitt Original Face">
+            <p class="image-caption">Original Liberty</p>
+        </div>
+    </section>
+
+    <section class="context">
+        <h2>Part 1.8: Visual Anagrams</h2>
+        <p>In this part, we implement Visual Anagrams and create optical illusions with diffusion models. To do this, we basically denoise an image x_t at timestep t in the forward noising process with the prompt A to obtain noise estimate noise_A, but at the same time, we flip the noised image from timestep t of the forward process and denoise with prompt B! We can flip the noise B estimate and average the two noise A and B estimates. The final step is to perform a reverse diffusion step with the averaged noise estimate result we got in the previous step, giving us a visual anagram! </p><p> I tried 3 combinations of prompts to create visual anagrams: 1) "an oil painting of people around a campfire" and "an oil painting of an old man" is displayed. 2) "a lithograph of a skull" and "a lithograph of waterfalls" 3) "a lithograph of waterfalls" and "an oil painting of a snowy mountain village".  </p>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/oldm.png" alt="Pitt Original Face">
+            <p class="image-caption">Old Man</p>
+        </div>
+        <div>
+            <img src="./media/camp.png" alt="Pitt Original Face">
+            <p class="image-caption">Campfire</p>
+        </div>
+    </section>
+
+    </section><section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/skull.png" alt="Pitt Original Face">
+            <p class="image-caption">Skull</p>
+        </div>
+        <div>
+            <img src="./media/waterfall.png" alt="Pitt Original Face">
+            <p class="image-caption">Waterfalls</p>
+        </div>
+    </section>
+
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="" alt="">
+            <p class="image-caption"></p>
+        </div>
+        <div>
+            <img src="./media/snowy.png" alt="Pitt Original Face">
+            <p class="image-caption">Snowy Village (on Lake)</p>
+        </div>
+        <div>
+            <img src="./media/water2.png" alt="Pitt Original Face">
+            <p class="image-caption">Waterfalls 2</p>
+        </div>
+
+    </section>
+
+    <section class="context">
+        <h2>Part 1.9: Hybrid Images</h2>
+        <p>In this part, we implement Factorized Diffusion and create hybrid images similar to Project 2. To create hybrid images with a diffusion model, we can use a similar technique as above, creating a composite noise estimate by estimating the noise with two different text prompts, and then combining low frequencies from one noise estimate, and high frequencies from the other. The low and high frequency blending is exactly similar to the algorithm that we implemented to create hybrid images in Project 2!</p><p>Below are results of hybrid images from different text prompts: 1) skull far away, waterfall close up, 2) rocket far away, pencil close up, 3) man in hat far away, dog close up </p>
+    </section>
+
+</section><section class="image-grid" style="text-align: center;">
+    <div>
+        <img src="./media/hybrid1.png" alt="Pitt Original Face">
+        <p class="image-caption">Skull + WaterFall</p>
+    </div>
+    <div>
+        <img src="./media/hybrid2.png" alt="Pitt Original Face">
+        <p class="image-caption">Rocket + Pencil</p>
+    </div>
+    <div>
+        <img src="./media/hybrid3.png" alt="Pitt Original Face">
+        <p class="image-caption">Man in Hat + Dog</p>
+    </div>
+</section>
+
+<header>
+    <h1>CS180 Project 5B: Diffusion Models from Scratch!</h1>
+</header>
+
+<section class="context">
+    <h2>Part 1: Training a Single-Step Denoising UNet</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 1.1: Implementing the UNet</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 1.2: Using the UNet to Train a Denoiser</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 1.2.1: Training</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 1.2.2: Out-of-Distribution Testing</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 2: Training a Diffusion Model</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 2.1: Adding Time Conditioning to UNet</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 2.2: Training the UNet</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 2.3: Sampling from the UNet</h2>
+    <p></p>
+</section>
+
+
+<section class="context">
+    <h2>Part 2.4: Adding Class-Conditioning to UNet</h2>
+    <p></p>
+</section>
+
+<section class="context">
+    <h2>Part 2.5: Sampling from the Class-Conditioned UNet</h2>
+    <p></p>
+</section>

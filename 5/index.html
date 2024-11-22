@@ -245,25 +245,43 @@
     <section class="context">
         <h2>Part 0: Setup</h2>
         <p>For Setup, I setup the DeepFloyd IF diffusion model on Huggingface. DeepFloyd is a two stage model trained by Stability AI. The first stage produces images of size  64×64  and the second stage takes the outputs of the first stage and generates images of size  256×256. I made a Huggingface account, logged in, accepted the license on the model card, and generated a Hugging face Access Token that I could use in my Colab notebook to use the Diffusion Model. Because the text encoder is very large, I used a set of precomputed text embeddings to run the Diffusion Model.</p>
-        <p>The random seed I am using is 180 - I did not change the seed from its default value set in the Colab. I ran the DeepFloyd Diffusion model on three text prompts, as DeepFloyd was trained as a text-to-image model, and the results are displayed. Below are reflections on the quality of the outputs and their relationships to the text prompts.</p>
+        <p>The random seed I am using is 180 - I did not change the seed from its default value set in the Colab. I ran the DeepFloyd Diffusion model on three text prompts, as DeepFloyd was trained as a text-to-image model, and the results are displayed. Below are reflections on the quality of the outputs and their relationships to the text prompts. To generate images, I inputted the text embeddings through Stage 1 to create smaller images, and thenStage 2 then transformed those smaller images into larger versions, the ones displayed below.</p>
 
         <p>1) an oil painting of a snowy mountain village: The quality of the image generated is high, as there are many fine details such as a replication of the Aurora Borealis in the sky – a phenomenon present in colder regions – and also the placement of snow on flat surfaces like the branches of the trees and the ceiling. The presence of a oil-like texture is also evident, which reflects the original text prompt as well. The quality and relation to the prompt are very high.</p>
         <p>2) a man wearing a hat: This text prompt is vague, and the model does a great job extrapolating an image from the vague prompt that satisfies all the details. It is a man wearing a hat and the quality is high. I found it interesting how the model was able to extrapolate a type of hat and expression for the Man from just the vague prompt.</p>
         <p>3) a rocket ship: The quality and the relation to the prompt are both high. This is a simple prompt, and a simple image results, where the model does not over-extrapolate, and generates a simple image of a rocket flying. The finer detailing like the reflection of light on the Metallic rocket surface alongside the cloud created by the flames is also high quality.</p>
+
+        I also experimented with difference values for num_inference steps from the default value of 20 to a significantly lower value of 10. With the lower num inference steps, there were subtle and noticeable changes in quality, color expression, and detailing in the generated images that I observed.
     </section>
 
     <section class="image-grid41" style="text-align: center;">
         <div>
             <img src="./media/snowhouse.png" alt="Clooney Original Face">
-            <p class="image-caption">an oil painting of a snowy mountain village</p>
+            <p class="image-caption">an oil painting of a snowy mountain village, 20</p>
         </div>
         <div>
             <img src="./media/manhat.png" alt="Pitt Original Face">
-            <p class="image-caption">a man wearing a hat</p>
+            <p class="image-caption">a man wearing a hat, 20</p>
         </div>
         <div>
             <img src="./media/rocket.png" alt="Pitt Original Face">
-            <p class="image-caption">a rocket ship</p>
+            <p class="image-caption">a rocket ship, 20</p>
+        </div>
+    </section>
+
+    
+    <section class="image-grid41" style="text-align: center;">
+        <div>
+            <img src="./media/1011.png" alt="Clooney Original Face">
+            <p class="image-caption">an oil painting of a snowy mountain village, 50</p>
+        </div>
+        <div>
+            <img src="./media/1012.png" alt="Pitt Original Face">
+            <p class="image-caption">a man wearing a hat, 50</p>
+        </div>
+        <div>
+            <img src="./media/1014.png" alt="Pitt Original Face">
+            <p class="image-caption">a rocket ship, 50</p>
         </div>
     </section>
 

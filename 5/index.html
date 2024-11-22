@@ -959,56 +959,148 @@ Below, I inpainted three images (the test image of the Campanile alongside two i
 
 <section class="context">
     <h2>Part 1: Training a Single-Step Denoising UNet</h2>
-    <p></p>
+    <p>The goal of part 1 is to build a simple one step denoiser. Given a noisy image z, I trained a denoiser D such that it maps z to a clean image x. The denoiser optimizes over L2 loss so L2(D(z) - x) or the norm of the vector created by subtracting the denoised image and the original image from the training set. The denoising UNet we build will allow us to denoise images using a Diffusion model we built from scratch!</p>
 </section>
 
 <section class="context">
     <h2>Part 1.1: Implementing the UNet</h2>
-    <p></p>
+    <p>The Denoiser will be implemeneted as a UNet, where it will consist of a few downsampling and upsampling with skip connections (which are not direct connections between blocks, but rather additive connections that traverse and go anywhere along the path of our UNet's operations. </p><p>At a High Level, the blocks do the following: (1) Conv is a convolutional layer that doesn't change the image resolution, just the channel dimension, (2) DownConv is a convolutional layer that downsamples the tensor by 2 (3) Upconv is a convolutional layer that upsamples the tensor by 2 (4) Flatten is an average pooling layer that flattens a 7x7 tensor into a 1x1 tensor. We chose these dimensions because 7 is the resulting height and width after the downsampling operations (5) Unflatten is a convolutional layer that unflattens a 1x1 tensor into a 7x7 tensor (6) Concat is a channel-wise concatenation between tensors with the same 2D shape. We can use the torch.cat() from PyTorch to accomplish this result.</p>
+    <p>I also defined composed operations that combine multiple operations at once to make our model parameters more learnable. (1) ConvBlock combines two convolutions (2) DownBlock combines a DownConv and a Conv (3) Upblock combines UpConv and Conv. The total architecture is visualized below.</p>
 </section>
+
+<div style="text-align: center;">
+    <img src="./media/arch.png" alt="Averaged Mid-way Face" style="width: 40%; height: auto;">
+    <p class="image-caption">UNet Architecture</p>
+</div>
 
 <section class="context">
     <h2>Part 1.2: Using the UNet to Train a Denoiser</h2>
-    <p></p>
+    <p>The problem we are trying to solve with our UNet is to train a denoiser D_theta such that it maps z to a clean image x using L2 Loss between the predicted unnoised image and the original image. To calculate this L2 loss, we can generate training pairs of (z, x) pairs where z is a noised version of the clean MNIST digit image x. I generated z from x using the noising process that is defined by z = x + sigma * noise where noise is sampled from N(0, I) and sigma is a parameter set. Below is a plot that visualizes different noising processes over different values of sigma = [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0], assuming normalized noise in [0, 1]. The plot is below.</p>
 </section>
+
+<div style="text-align: center;">
+    <img src="./media/noisegraphb.png" alt="Averaged Mid-way Face" style="width: 35%; height: auto;">
+    <p class="image-caption">Noised MNIST for sigmas</p>
+</div>
 
 <section class="context">
     <h2>Part 1.2.1: Training</h2>
-    <p></p>
+    <p>To train the model UNet that we defined earlier in Part 1.1, we will noise images with sigma = 0.5 in the MNIST dataset taken from the torchvision.datasets.MNIST function training and test datasets. I shuffled the dataset into train and tets before creating the DataLoader, and trained on only the training set. The parameters used for training were batch size = 256, epochs = 5, hidden dimension D = 128, and learning rate = Adam & 1e-4. Intuitively, how this training process works is that it first calculates loss on the training pairs and the output of the model (with some default initialized parameters for the model). It calculates the gradient of the Loss Function with respect to the current parameters (as it points in the directon of steepest ascent). It then subtracts the gradient * our learning rate from the parameters, moving closer every batch/epoch to a global minimum for the Loss function on the training data, at which point, the model will be trained and ready to go! </p>
+    <p>Below is a graph of the loss function on the training data over each step in the training process. I also visualized the denoised results on images from the test set from the 1st and 5th epoch model parameters (as expected, the 5th epoch results are substantially clearer, as loss is optimized using gradient descent).</p>
+</section>
+
+<div style="text-align: center;">
+    <img src="./media/loss1.png" alt="Averaged Mid-way Face" style="width: 35%; height: auto;">
+    <p class="image-caption">Loss graph over training</p>
+</div>
+
+
+</section><section class="image-grid2" style="text-align: center;">
+    <div>
+        <img src="./media/epoch11.png" alt="Pitt Original Face">
+        <p class="image-caption">Epoch 1 Results</p>
+    </div>
+    <div>
+        <img src="./media/epoch51.png" alt="Pitt Original Face">
+        <p class="image-caption">Epoch 5 Results</p>
+    </div>
 </section>
 
 <section class="context">
     <h2>Part 1.2.2: Out-of-Distribution Testing</h2>
-    <p></p>
+    <p>Our denoiser was trained on MNIST digits noised with sigma = 0.5. We can visualize how the denoiser performs on the other different values of sigma that it wasn't trained for. Intuitively, sigma's below 0.5 will lead to good results, but above will lead to lower quality results, as there is more noise present in the image than what the UNet denoiser was trained for.</p>
 </section>
+
+
+<div style="text-align: center;">
+    <img src="./media/result.png" alt="Averaged Mid-way Face" style="width: 55%; height: auto;">
+    <p class="image-caption">Out of Distribution Results</p>
+</div>
+
 
 <section class="context">
     <h2>Part 2: Training a Diffusion Model</h2>
-    <p></p>
+    <p>In Part 2, I trained a UNet Model that can iteratively denoise an image. In Part 1, we solved the problem of optimizing L2 Loss over the predicted denoised images and the original images from the MNIST dataset. In Part 2, I introduced a small difference, training the UNet to predict the added noise instead of the clean image directly. These are mathematically equivalent due to the equation x = z - sigma * noise. Therefore, the L2 Loss we were previously optimizing becomes L2 Loss(predicted noise - noise). </p><p>One-step denoising does not give high quality results (as seen in Project 5A), so instead, we iteratively denoise the image by sampling a pure noise image and iteratively denoising it to create a realistic image. When t=0, x_t is the clean image x_0, and when t=T, x_t is pure noise. Any x_t inbetween [0, T] will be a linear combination of the two. Because in 5B, we are working with simple MNIST digits, and not real-life images, we set our value for timesteps T in the iterative denoising process to 300 instead of 1000 in part A. Since the variance of x_t varies iwth t, we condition a single UNet with timestep T instead of training T separate UNets. After this whole process as detailed above is done, we will have an iteratively denoising Diffusion UNet model! </p>
 </section>
 
 <section class="context">
     <h2>Part 2.1: Adding Time Conditioning to UNet</h2>
-    <p></p>
+    <p>To inject t as discussed in the previous section and condition our UNet model, we use a new operator called FCBlock (fully-connected block) which we use to inject the conditioning signal into the UNet. FCBlock has Linear(F_in, F_out) with F_in input and F_out output features implemented using nn.Linear.</p>
 </section>
+
+
+<div style="text-align: center;">
+    <img src="./media/arch2.png" alt="Averaged Mid-way Face" style="width: 40%; height: auto;">
+    <p class="image-caption">UNet Architecture with FCBlocks</p>
+</div>
 
 <section class="context">
     <h2>Part 2.2: Training the UNet</h2>
-    <p></p>
+    <p>Training the time-conditioned UNet is an iterative process: I picked a random image from the MNIST training dataset, a random t, and trained the denoiser to predict the noise in x_t. I repeated this process for different images and t values until the model converged to a global minimum and gave high quality denoised results. The Hidden dimension D was set to 65, and the Learning rate = Adam & 1e-3 with a exponential learning rate decay scheduler. The batch size was 128 and the number of epochs for training was 20 (as this was a more difficult task than Part 1). Below is a graph of the training losses for the UNet during each step of the training process.</p>
 </section>
+
+
+
+<div style="text-align: center;">
+    <img src="./media/loss.png" alt="Averaged Mid-way Face" style="width: 35%; height: auto;">
+    <p class="image-caption">Loss graph over training</p>
+</div>
+
 
 <section class="context">
     <h2>Part 2.3: Sampling from the UNet</h2>
-    <p></p>
+    <p>The sampling process is very similar to Part A, except that we don't need to predict the variance like in the DeepFloyd model. Instead, we just use our list. I visualized sampling many different images in a grid at 5 epochs and 20 epochs model parameters. As expected, at 20 epochs, the results were better to an optimized model and loss. I also included a training loss curve plot for the time conditioned UNet over the whole training process. </p>
+</section>
+
+
+
+</section><section class="image-grid2" style="text-align: center;">
+    <div>
+        <img src="./media/two.png" alt="Pitt Original Face">
+        <p class="image-caption">Epoch 5 Results</p>
+    </div>
+    <div>
+        <img src="./media/one.png" alt="Pitt Original Face">
+        <p class="image-caption">Epoch 20 Results</p>
+    </div>
 </section>
 
 
 <section class="context">
     <h2>Part 2.4: Adding Class-Conditioning to UNet</h2>
-    <p></p>
+    <p>To make the results better and give more control for image generation, we can also condition our UNet on the digits 0-9, adding two more FC Blocks (as previously defined). I did this as the results in the previous section visualized in the grid were suboptimal for denoising. To make it more efficient, we make it a one-hot vctor instead of a single scalar. In addition, because we still want our UNet to work without it being conditionedon the class, we can implement dropout, where 10% of the time, we drop the class conditioning vector by setting it equal to 0. The training method for this UNet modified is the same as time-only with the conditioning and unconditional generation being the only difference.</p>
 </section>
+
+
+<div style="text-align: center;">
+    <img src="./media/loos.png" alt="Averaged Mid-way Face" style="width: 35%; height: auto;">
+    <p class="image-caption">Loss graph over training</p>
+</div>
 
 <section class="context">
     <h2>Part 2.5: Sampling from the Class-Conditioned UNet</h2>
-    <p></p>
+    <p>The sampling process is the same as Part A, where we saw that the conditional results aren't good unless we use Classifier Free Guidance (which led to significant improvements). To improve the sampling results, I used CFG with a scale of 5.0. The results for this section are visualized in a similar grid format to 2.3!</p>
 </section>
+
+</section><section class="image-grid2" style="text-align: center;">
+    <div>
+        <img src="./media/les1.png" alt="Pitt Original Face">
+        <p class="image-caption">Epoch 5 Results</p>
+    </div>
+    <div>
+        <img src="./media/go1.png" alt="Pitt Original Face">
+        <p class="image-caption">Epoch 20 Results</p>
+    </div>
+</section>
+
+
+<section class="context">
+    <h2>Conclusion</h2>
+    <p>Overall, I learnt a lot & especially since GenAI is so relevant right now, learning about the intricacies of Diffusion Models and Denoising Convolutional Neural Networks was valuable and rewarding!</p>
+    <!-- <p>To course staff, some constructive critcism for future iterations: this project was extremely long, as you can probably tell scrolling through my website. After a point, it became more tedious than rewarding due to simply how long it was. Please prioritize quantity over quality: the length and number of projects in this class is so cumbersome, it actually prevents us from deep diving into topics, and learning effectively.</p> -->
+</section>
+
+
+
+
+

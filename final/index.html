@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS180 Final Project </title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0 0 0;
+        }
+
+        header img {
+            width: 400px; /* Smaller box size */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+
+        header h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .author {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Styles for the context section */
+        .context {
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #ddd;
+        }
+
+        .context h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .context p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid41 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid41 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid17 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid17 img {
+            width: 100%; /* Makes images fill their container */
+            height: auto; /* Maintains aspect ratio */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        
+
+        .image-grid9 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust min/max sizes */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid9 img {
+            width: 100%; /* Make sure images take up the full column width */
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-grid2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin: 40px auto;
+        max-width: 800px;
+        }
+        .image-grid2 > div {
+            flex: 1;
+        }
+        .image-grid2 img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid3 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-grid5 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        /* Grid styles for images (2 images per row) */
+        .image-grid4 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Change to 2 columns per row */
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .centered-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            justify-content: center;
+        }
+        .centered-image-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div style="text-align: center;">
+            <img src="./media/NERF-logo.png" alt="Averaged Mid-way Face" style="width: 25%; height: auto;">
+        </div>
+    </header>
+    
+
+    <header>
+        <h1>CS180 Final Project: Neural Radiance Fields</h1>
+    </header>
+
+    <div class="author">
+        <p>By Vishal Bansal</p>
+    </div>
+
+    <section class="context">
+        <h2>Part 1: Fit a Neural Field to a 2D Image</h2>
+        <p>In Part 1, I created a neural network that learns to represent a 2D image by mapping pixel coordinates to RGB colors. I built a multilayer perceptron (MLP) that takes x,y pixel positions as input, applies sinusoidal positional encoding to transform the 2D coordinates into a 42-dimensional vector (using L=10 frequency levels), and processes this through several linear layers with ReLU activations to output RGB values. For training, I implemented a dataloader that randomly samples batches of pixels since processing all pixels at once would be memory-intensive. I used MSE loss with Adam optimizer (learning rate 1e-2) and tracked the network's performance using PSNR (Peak Signal-to-Noise Ratio) as my metric.
+</p><p>
+            My network architecture consisted of 4 linear layers (256 channels each) with ReLU activations, followed by a final layer outputting RGB values. I tested it on two different images - a fox photograph and a cat photograph. The training visualizations show interesting progression: starting from solid-colored approximations at Epoch 1, by Epoch 251 both images show clear subject definition, and by Epoch 501-1000 the network captures fine details like fur textures and facial features. I conducted hyperparameter tuning experiments, varying the network depth, width, and positional encoding frequencies. The PSNR curves for both images show rapid initial improvement followed by gradual refinement, with the network achieving high-quality reconstructions by Epoch 1000. The cat image's hyperparameter tuning led to interesting changes: the convergence process due to the learning rate being increased and L being modified was slower, and as a result, the first plot shows significantly more noise than the result with the default parameters without tuning. The parameters were 1) num_epochs=1000, batch_size=10000, lr=1e-2, L=10, layers=4
+and 2) num_epochs=1000, batch_size=10000, lr=1e-3, L=5, layers=4
+</p>
+    </section>
+
+
+    <div style="text-align: center;">
+        <img src="./media/one.png" alt="Averaged Mid-way Face" style="width: 36%; height: auto;">
+        <p class="image-caption">Nerf 2D Architecture</p>
+    </div>
+
+
+
+    <div style="text-align: center;">
+        <img src="./media/1.png" alt="Averaged Mid-way Face" style="width: 76%; height: auto;">
+        <p class="image-caption">Optimizing Process #1</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/2.png" alt="Averaged Mid-way Face" style="width: 76%; height: auto;">
+        <p class="image-caption">PSNR and Training Plots</p>
+    </div>
+
+    <div style="text-align: center;">
+        <img src="./media/3.png" alt="Averaged Mid-way Face" style="width: 76%; height: auto;">
+        <p class="image-caption">Optimizing Process #2</p>
+    </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/4.png" alt="Averaged Mid-way Face" style="width: 76%; height: auto;">
+        <p class="image-caption">After Hyperparameter Tuning #2</p>
+    </div>
+    
+    <section class="context">
+        <h2>Part 2: Fit a Neural Radiance Field from Multi-view Images</h2>
+        <p>In Part 2, I expanded my neural field implementation to handle 3D space representation using a technique called Neural Radiance Fields (NeRF). Instead of working with a single 2D image, I now worked with multiple calibrated images of a Lego scene taken from different viewpoints. The dataset included 100 training images, 10 validation images, and 60 test camera positions for novel view synthesis, all at 200x200 resolution. Each image came with its corresponding camera-to-world transformation matrix and focal length. The visualization shows the camera positions distributed around the scene, with training cameras in black, validation in red, and test views in green, illustrating how the images capture the scene from multiple angles to enable 3D reconstruction.
+        </p>
+    </section>
+
+
+    
+
+    
+    <section class="context">
+        <h2>Part 2.1: Create Rays from Cameras</h2>
+        <p>In Part 2.1, I worked on implementing the camera and ray mathematics that form the foundation of NeRF. I developed functions to handle coordinate transformations between different spaces: world, camera, and pixel coordinates. I implemented the transform function that converts points between camera and world space using camera-to-world transformation matrices, and created functions to handle pixel-to-camera coordinate conversions using the camera's intrinsic matrix K (which depends on focal length and principal point). Finally, I built a ray generation system that creates rays for each pixel by calculating their origins (camera positions) and directions (normalized vectors from camera through pixels). These rays are crucial for the volume rendering process that NeRF uses to generate novel views.</p>
+    </section>
+
+    <section class="context">
+        <h2>Part 2.2: Sampling</h2>
+        <p>In Part 2.2, I implemented the sampling strategies needed for NeRF. The first part involved sampling rays from the training images - I could either randomly sample N rays from each image or flatten all pixels and sample globally. Building on Part 1's image sampling, I added a +0.5 offset to center the sampling grid on pixels. For each sampled ray, I then implemented point sampling along its length between near=2.0 and far=6.0 planes. To prevent overfitting, I added small random perturbations to these sample points during training. These sample points along each ray would later be used by the NeRF network to predict color and density values. I set the number of samples per ray to either 32 or 64 for this project.</pP>
+    </section>
+
+    <section class="context">
+        <h2>Part 2.3: Putting the Dataloading All Together</h2>
+        <p>In Part 2.3, I developed a comprehensive dataloader that integrates all the previous components needed for training NeRF with multiple views. The dataloader's main job is to randomly sample pixels from the training images and convert them into rays using the camera parameters. This is more complex than Part 1's simple 2D sampling because now we need to handle camera intrinsics (focal length, principal point) and extrinsics (rotation and translation matrices) to generate proper rays. For each batch, the dataloader returns ray origins, ray directions, and the corresponding pixel colors from the training images.
+
+           </p><p> To help debug and verify my implementation, I created visualization code using the Viser library. This generates an interactive 3D view showing the camera frustums (the pyramidal viewing volume of each camera), the sampled rays, and the 3D sample points along those rays. The visualization was crucial for ensuring everything was working correctly - I could visually confirm that rays were being generated in the right directions and that sample points were properly distributed in 3D space. I also implemented checks to verify that rays stay within the camera frustum and added assertions to test that my pixel sampling matched the ground truth values. This careful verification process helped catch and fix several subtle bugs in the coordinate transformations and sampling logic.</p>
+    </section>
+
+    <div style="text-align: center;">
+        <img src="./media/a.png" alt="Averaged Mid-way Face" style="width: 36%; height: auto;">
+        <p class="image-caption">1st Visual</p>
+    </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/b.png" alt="Averaged Mid-way Face" style="width: 36%; height: auto;">
+        <p class="image-caption">2nd Visual Rays through Image</p>
+    </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/c.png" alt="Averaged Mid-way Face" style="width: 36%; height: auto;">
+        <p class="image-caption">2nd Visual Angle 2</p>
+    </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/d.png" alt="Averaged Mid-way Face" style="width: 36%; height: auto;">
+        <p class="image-caption">2nd Visual Angle 3</p>
+    </div>
+
+    <section class="context">
+        <h2>Part 2.4: Neural Radiance Field</h2>
+        <p>In Part 2.4, I implemented the core Neural Radiance Field (NeRF) network architecture, which builds upon the MLP from Part 1 but with several key modifications for handling 3D scenes. The network takes 3D world coordinates and view directions as input, applying positional encoding (though with fewer frequency levels L=4 compared to L=10 for coordinates) to both. The architecture is significantly deeper than in Part 1, reflecting the more complex task of learning a 3D representation. A crucial design element is that the network outputs both density (opacity) and color for each 3D point - density is view-independent and uses ReLU activation to ensure positive values, while color is view-dependent and uses sigmoid activation to stay within [0,1]. The network also employs a skip connection by concatenating the encoded input coordinates halfway through, which helps prevent the network from "forgetting" spatial information as it processes through many layers.</p>
+    </section>
+
+
+    <div style="text-align: center;">
+        <img src="./media/two.png" alt="Averaged Mid-way Face" style="width: 56%; height: auto;">
+        <p class="image-caption">Nerf 3D Architecture</p>
+    </div>
+
+
+
+
+    <section class="context">
+        <h2>Part 2.5: Volume Rendering</h2>
+        <p>In Part 2.5, I implemented the volume rendering component of NeRF, which is crucial for generating novel views from the learned 3D representation. The process follows the physics of light transport, where we compute how light accumulates along each ray by considering both color and opacity (density) at each sample point. The mathematical formulation uses an integral equation that accounts for both the color contribution at each point and the transmittance (probability of light reaching that point without being blocked). Since we can't compute this integral analytically, I implemented a discrete approximation that steps along each ray, accumulating color contributions weighted by their transmittance values. The implementation needed to be done in PyTorch to enable backpropagation during training. I validated my implementation against a provided test case that checks if the rendered colors match expected values within a small tolerance, ensuring the mathematical correctness of the volume rendering computation.</p>
+    </section>
+
+
+
+    <div style="text-align: center;">
+        <img src="./media/metrics.png" alt="Averaged Mid-way Face" style="width: 50%; height: auto;">
+        <p class="image-caption">Training and PSNR Curves</p>
+    </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/gif.gif" alt="Averaged Mid-way Face" style="width: 26%; height: auto;">
+        <p class="image-caption">Rotation .gif, PSNR 25.5, 25000 Iterations, 1e-3 Learning Rate, 7500 Batch Size</p>
+    </div>
+
+
+    <div style="text-align: center;">
+        <img src="./media/training_progression.png" alt="Averaged Mid-way Face" style="width: 64%; height: auto;">
+        <p class="image-caption">Training Progression from one camera view</p>
+    </div>
+    
+
+    <div style="text-align: center;">
+        <img src="./media/b.png" alt="Averaged Mid-way Face" style="width: 30%; height: auto;">
+        <p class="image-caption">Rays and samples at a single training step</p>
+    </div>
+
+
+    <section class="context">
+        <h2>B & W</h2>
+        <p>In this B&W, I modified the NeRF's volume rendering implementation to support custom background colors instead of the default black background. This involved updating the rendering equation to properly handle accumulated transmittance. When a ray doesn't hit any dense objects (transmittance remains high), it should show the background color instead of black. I achieved this by adding the background color contribution term (1 - accumulated_opacity) * background_color to the volume rendering equation, where accumulated_opacity represents how much of the ray's visibility has been blocked by the scene. This allows the background color to show through in transparent regions while maintaining proper compositing with the scene geometry. The final rendered video of the Lego scene now appears with my chosen background color, creating a more visually appealing result while maintaining physically accurate light transport simulation.</p>         
+    </section>
+
+
+    <div style="text-align: center;">
+        <img src="./media/gif.gif" alt="Averaged Mid-way Face" style="width: 26%; height: auto;">
+        <p class="image-caption">Rotation .gif w modified background color</p>
+    </div>
+
+
+    <section class="context">
+        <h2>Conclusion</h2>
+        <p>In this project, I dove deep into implementing Neural Radiance Fields (NeRF) from scratch, progressing from a simple 2D neural representation of images to a full 3D scene reconstruction system. What fascinated me most was understanding how NeRF combines several elegant ideas - positional encoding for capturing high-frequency details, volume rendering for realistic view synthesis, and clever sampling strategies along rays - to achieve such impressive 3D reconstructions from just a set of 2D images.</p>
+    </section>
+</body>
+</html>
